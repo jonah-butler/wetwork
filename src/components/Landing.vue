@@ -1,5 +1,5 @@
 <template>
-  <section class="bg__dark-alien-green w-100vw h-100vh terminal">
+  <section class="bg__dark-alien-green w-100vw h-100 terminal">
     <div ref="terminalInner" class="terminal-inner">
       <keep-alive>
         <component
