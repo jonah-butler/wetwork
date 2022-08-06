@@ -35,7 +35,7 @@ export default defineComponent({
     console.log(context);
     const user = ref('client');
     const location = ref('wet.work:');
-    const preInput = ref('$ ~ ');
+    const preInput = ref('$~');
     const terminalInput = ref<HTMLInputElement>();
     const command = ref('');
 
