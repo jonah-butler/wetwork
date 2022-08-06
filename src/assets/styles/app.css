@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'DinaRemaster',
+  font-family: 'DinaRemaster';
   font-display: auto;
   unicode-range: U+000-5FF;
   src: local("DinaRemaster"), url("/fonts/Dina/DinaRemasterCollection.ttc") format("ttc");
