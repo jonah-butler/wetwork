@@ -1,0 +1,99 @@
+.dark-alien-green {
+  color: #132616;
+}
+.bg__dark-alien-green {
+  background-color: #132616;
+}
+
+.light-alien-green {
+  color: #76e582;
+}
+.bg__light-alien-green {
+  background-color: #76e582;
+}
+
+.dirty-alien-yellow {
+  color: #6a7729;
+}
+.bg__dirty-alien-yellow {
+  background-color: #6a7729;
+}
+
+.light-alien-purple {
+  color: #48597d;
+}
+.bg__light-alien-purple {
+  background-color: #48597d;
+}
+
+.dark-alien-blood {
+  color: #732a27;
+}
+.bg__dark-alien-blood {
+  background-color: #732a27;
+}
+
+.light-alien-gray {
+  color: #5e766e;
+}
+.bg__light-alien-gray {
+  background-color: #5e766e;
+}
+
+.light-alien-blue {
+  color: #2c5f6d;
+}
+.bg__light-alien-blue {
+  background-color: #2c5f6d;
+}
+
+.w-100vw {
+  width: 100vw;
+}
+
+.h-100vh {
+  height: 100vh;
+}
+
+.d__flex {
+  display: flex;
+}
+
+.flex-dir__row {
+  flex-direction: row;
+}
+.flex-dir__col {
+  flex-direction: column;
+}
+
+.justify-content__center {
+  justify-content: center;
+}
+
+.ff__dina {
+  font-family: 'DinaRemaster' !important,
+}
+
+pre.ff__dina {
+  font-family: 'DinaRemaster', monospace !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #132616;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #132616;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #132616;
+}
