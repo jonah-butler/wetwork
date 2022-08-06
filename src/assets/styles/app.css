@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'DinaRemaster', 'DinaRemasterCollection';
-  src: url("~@/assets/fonts/Dina/DinaRemasterCollection.ttc") format("ttc");
+  font-family: 'DinaRemaster';
+  src: url("@/assets/fonts/Dina/DinaRemasterCollection.ttc");
 }
 
 .dark-alien-green {
