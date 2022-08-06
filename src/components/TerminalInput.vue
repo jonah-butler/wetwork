@@ -6,6 +6,8 @@
     <span>&nbsp;</span>
     <span class="light-alien-green">
       <input
+        autocapitalize="off"
+        autocomplete="off"
         v-model="command"
         :class="{'valid': doesCommandExist }"
         ref="terminalInput"
