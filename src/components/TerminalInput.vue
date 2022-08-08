@@ -5,16 +5,17 @@
     <span class="light-alien-gray">{{ preInput }}</span>
     <span>&nbsp;</span>
     <span class="light-alien-green">
-      <input
-        autocapitalize="off"
-        autocomplete="off"
-        v-model="command"
-        :class="{'valid': doesCommandExist }"
-        ref="terminalInput"
-        type="text"
-        id="terminalInput"
-        @keyup.enter="showMessage"
-      >
+      <form @keydown.enter.prevent="showMessage" netlify>
+        <input
+          autocapitalize="off"
+          autocomplete="off"
+          v-model="command"
+          :class="{'valid': doesCommandExist }"
+          ref="terminalInput"
+          type="text"
+          id="terminalInput"
+        >
+      </form>
     </span>
   </div>
 </template>
