@@ -5,7 +5,7 @@
     <span class="light-alien-gray">{{ preInput }}</span>
     <span>&nbsp;</span>
     <span class="light-alien-green">
-      <form @keydown.enter.prevent="showMessage" netlify>
+      <form @keydown.enter.prevent="showMessage" data-netlify="true">
         <input
           autocapitalize="off"
           autocomplete="off"
