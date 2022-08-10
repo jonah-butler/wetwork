@@ -3,7 +3,6 @@
     <span class="user dirty-alien-yellow">{{ user }}</span>
     <span class="location light-alien-blue"><span class="light-alien-gray">@</span>{{ location }}</span>
     <span class="light-alien-gray">{{ preInput }}</span>
-    <span>&nbsp;</span>
     <span class="light-alien-green input-container">
       <form name="command" @keydown.enter.prevent="showMessage" data-netlify="true">
         <input
