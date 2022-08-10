@@ -4,7 +4,7 @@
     <span class="location light-alien-blue"><span class="light-alien-gray">@</span>{{ location }}</span>
     <span class="light-alien-gray">{{ preInput }}</span>
     <span>&nbsp;</span>
-    <span class="light-alien-green">
+    <span class="light-alien-green input-container">
       <form name="command" @keydown.enter.prevent="showMessage" data-netlify="true">
         <input
           autocapitalize="off"
@@ -88,6 +88,11 @@ export default defineComponent({
 }
 #terminalInput.valid {
   color: #76e582;
+}
+.input-container {
+  position: relative;
+  top: -3px;
+  left: 2px;
 }
 
 </style>
