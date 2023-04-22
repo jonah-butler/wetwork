@@ -1,63 +1,59 @@
 <template>
   <div class="d__flex flex-dir__row terminal-input__cached">
     <span class="user dirty-alien-yellow">{{ user }}</span>
-    <span class="location light-alien-blue"><span class="light-alien-gray">@</span>{{ location }}</span>
+    <span class="location light-alien-blue"
+      ><span class="light-alien-gray">@</span>{{ location }}</span
+    >
     <span class="light-alien-gray">{{ preInput }}</span>
     <span class="light-alien-green input-container">
-      <form name="command" @keydown.enter.prevent="showMessage" data-netlify="true">
+      <form
+        name="command"
+        @keydown.enter.prevent="showMessage"
+        data-netlify="true"
+      >
         <input
           autocapitalize="off"
           autocomplete="off"
           v-model="command"
-          :class="{'valid': doesCommandExist }"
+          :class="{ valid: doesCommandExist }"
           ref="terminalInput"
           type="text"
           id="terminalInput"
-        >
+        />
       </form>
     </span>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  onMounted,
-  computed,
-  SetupContext
-} from 'vue';
-import routeData from '@/data';
+import { defineComponent, ref, onMounted, computed, SetupContext } from "vue";
+import routeData from "@/data";
 
 export default defineComponent({
   props: [],
   setup(props, context: SetupContext) {
-    console.log(context);
-    const user = ref('client');
-    const location = ref('wet.work:');
-    const preInput = ref('$~');
+    const user = ref("client");
+    const location = ref("wet.work:");
+    const preInput = ref("$~");
     const terminalInput = ref<HTMLInputElement>();
-    const command = ref('');
+    const command = ref("");
 
     onMounted(() => {
       terminalInput.value!.focus();
     });
 
     const doesCommandExist = computed(() => {
-      return Object.prototype
-        .hasOwnProperty
-        .call(routeData, command.value);
+      return Object.prototype.hasOwnProperty.call(routeData, command.value);
     });
 
     const showMessage = () => {
-      if(!doesCommandExist.value) {
-        context.emit('error', command.value);
+      if (!doesCommandExist.value) {
+        context.emit("error", command.value);
       } else {
-        context.emit('sendCommand', command.value);
+        context.emit("sendCommand", command.value);
       }
-      command.value = '';
-    }
-    
+      command.value = "";
+    };
 
     return {
       user,
@@ -66,10 +62,10 @@ export default defineComponent({
       preInput,
       showMessage,
       terminalInput,
-      doesCommandExist
+      doesCommandExist,
     };
-  }
-})
+  },
+});
 </script>
 
 <style>
@@ -78,7 +74,7 @@ export default defineComponent({
   background: transparent;
   border: none;
   color: #ac564e;
-  font-family: 'DinaRemaster';
+  font-family: "DinaRemaster";
   font-size: 1.2rem;
   width: 100%;
 }
@@ -93,5 +89,4 @@ export default defineComponent({
   top: -3px;
   left: 2px;
 }
-
 </style>

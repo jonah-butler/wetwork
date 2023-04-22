@@ -7,11 +7,11 @@
           :key="message.message"
           :is="message.cachedInput"
           :inputMessage="message.input"
-          >
-            <component :is="message.component" />
+        >
+          <component :is="message.component" />
         </component>
       </keep-alive>
-      <TerminalInput 
+      <TerminalInput
         @sendCommand="loadComponent"
         @error="loadDefaultErrComponent"
       />
@@ -20,20 +20,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, shallowRef, watch, triggerRef, ref, onUpdated } from 'vue';
-import BannerMessage from '@/components/messages/Banner.vue';
-import CachedInput from '@/components/messages/CachedInput.vue';
-import MessageHistory from '@/interfaces/messageHistory.interface';
-import TerminalInput from '@/components/TerminalInput.vue';
-import routeData from '@/data';
-import ErrorMessage from '@/components/messages/Error.vue';
+import {
+  defineComponent,
+  shallowRef,
+  watch,
+  triggerRef,
+  ref,
+  onUpdated,
+} from "vue";
+import BannerMessage from "@/components/messages/Banner.vue";
+import CachedInput from "@/components/messages/CachedInput.vue";
+import MessageHistory from "@/interfaces/messageHistory.interface";
+import TerminalInput from "@/components/TerminalInput.vue";
+import routeData from "@/data";
+import ErrorMessage from "@/components/messages/Error.vue";
 
 export default defineComponent({
-  name: 'TerminalLanding',
+  name: "TerminalLanding",
   components: {
     BannerMessage,
     CachedInput,
-    TerminalInput
+    TerminalInput,
   },
   setup() {
     const terminalInner = ref<HTMLDivElement>();
@@ -41,32 +48,34 @@ export default defineComponent({
       {
         cachedInput: CachedInput,
         component: BannerMessage,
-        input: 'banner',
+        input: "banner",
       },
     ]);
 
     watch(messages, () => {
-      console.log()
+      console.log();
     });
 
     onUpdated(() => {
       scrollToBottom();
-    })
+    });
 
     const buildComponentInstructions = (command: string): MessageHistory => {
       console.log(command);
       return {
         cachedInput: CachedInput,
         component: routeData[command].component,
-        input: command
+        input: command,
       };
     };
 
-    const buildErrorComponentInstructions = (command: string): MessageHistory => {
+    const buildErrorComponentInstructions = (
+      command: string
+    ): MessageHistory => {
       return {
         cachedInput: CachedInput,
         component: ErrorMessage,
-        input: command
+        input: command,
       };
     };
 
@@ -83,7 +92,7 @@ export default defineComponent({
     };
 
     const scrollToBottom = () => {
-      terminalInner.value!.scrollTop = terminalInner.value!.clientHeight;
+      terminalInner.value!.scrollTop = terminalInner.value!.scrollHeight;
     };
 
     return {
@@ -91,9 +100,9 @@ export default defineComponent({
       CachedInput,
       terminalInner,
       loadComponent,
-      loadDefaultErrComponent
-    }
-  }
+      loadDefaultErrComponent,
+    };
+  },
 });
 </script>
 

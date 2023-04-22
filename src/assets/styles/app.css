@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'DinaRemaster';
+  font-family: "DinaRemaster";
   src: url("@/assets/fonts/Dina/DinaRemasterCollection.ttc");
 }
 
@@ -80,11 +80,11 @@
 }
 
 .ff__dina {
-  font-family: 'DinaRemaster' !important,
+  font-family: "DinaRemaster" !important;
 }
 
 pre.ff__dina {
-  font-family: 'DinaRemaster', monospace !important;
+  font-family: "DinaRemaster", monospace !important;
 }
 
 /* width */
@@ -105,4 +105,12 @@ pre.ff__dina {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #132616;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
 }
