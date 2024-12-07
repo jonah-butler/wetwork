@@ -1,9 +1,9 @@
 <template>
   <div class="output d__flex flex-dir__col">
     <div class="d__flex flex-dir__row terminal-input__cached">
-      <span class="user dirty-alien-yellow">{{ user }}</span>
-      <span class="location light-alien-blue"><span class="light-alien-gray">@</span>{{ location }}</span>
-      <span class="light-alien-gray">{{ preInput }}</span>
+      <span class="user vibrant-alien-yellow">{{ user }}</span>
+      <span class="location light-alien-blue"><span class="white">@</span>{{ location }}</span>
+      <span class="white">{{ preInput }}</span>
       <span>&nbsp;</span>
       <span class="light-alien-green">{{ inputMessage }}</span>
     </div>
@@ -21,7 +21,7 @@ export default defineComponent({
   setup() {
     const user = ref('client');
     const location = ref('wet.work:');
-    const preInput = ref('$ ~ ');
+    const preInput = ref('$~');
 
     return {
       user,

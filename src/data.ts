@@ -3,6 +3,8 @@ import BannerMessage from "@/components/messages/Banner.vue";
 import CommandMessage from "@/components/messages/CommandMessage.vue";
 import AudioMessage from "@/components/messages/Audio.vue";
 import ShowMessage from "@/components/messages/ShowMessage.vue";
+import ClearMessage from "./components/messages/ClearMessage.vue";
+import SocialMessage from "./components/messages/SocialMessage.vue";
 
 interface RouteComponent {
   component: Component;
@@ -25,6 +27,12 @@ const routes: Routes = {
   shows: {
     component: ShowMessage,
   },
+  clear: {
+    component: ClearMessage,
+  },
+  socials: {
+    component: SocialMessage,
+  }
 };
 
 export default routes;

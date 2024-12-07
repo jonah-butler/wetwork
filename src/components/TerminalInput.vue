@@ -1,11 +1,11 @@
 <template>
   <div class="d__flex flex-dir__row terminal-input__cached">
-    <span class="user dirty-alien-yellow">{{ user }}</span>
+    <span class="user vibrant-alien-yellow">{{ user }}</span>
     <span class="location light-alien-blue"
-      ><span class="light-alien-gray">@</span>{{ location }}</span
+      ><span class="white">@</span>{{ location }}</span
     >
-    <span class="light-alien-gray">{{ preInput }}</span>
-    <span class="light-alien-green input-container">
+    <span class="white">{{ preInput }}</span>
+    <span class="light-alien-green input-container w-100">
       <form
         name="command"
         @keydown.enter.prevent="showMessage"
@@ -31,7 +31,7 @@ import routeData from "@/data";
 
 export default defineComponent({
   props: [],
-  setup(props, context: SetupContext) {
+  setup(_props, context: SetupContext) {
     const user = ref("client");
     const location = ref("wet.work:");
     const preInput = ref("$~");
@@ -73,6 +73,7 @@ export default defineComponent({
   caret-color: white;
   background: transparent;
   border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: #ac564e;
   font-family: "DinaRemaster";
   font-size: 1.2rem;
@@ -86,7 +87,8 @@ export default defineComponent({
 }
 .input-container {
   position: relative;
-  top: -3px;
+  top: -2px;
   left: 2px;
+  padding-left: 5px;
 }
 </style>

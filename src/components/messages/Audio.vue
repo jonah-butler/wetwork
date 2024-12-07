@@ -24,16 +24,16 @@ export default defineComponent({
     const currentlyPlaying = ref('');
     const sources = [
         {
-            src: 'https://wetwork.s3.amazonaws.com/inside_my_mind.mp3',
-            title: 'inside_my_mind.mp3'
+            src: 'https://wetwork.s3.us-east-1.amazonaws.com/bite_my_tongue.wav',
+            title: 'bite_my_tongue.mp3'
         },
         {
-            src: 'https://wetwork.s3.amazonaws.com/secrets.mp3',
-            title: 'secrets.mp3'
+            src: 'https://wetwork.s3.us-east-1.amazonaws.com/magazines_%26_bad_faith.wav',
+            title: 'magazines_&_bad_faith.wav'
         },
         {
-            src: 'https://wetwork.s3.amazonaws.com/the_herd.mp3',
-            title: 'the_herd.mp3'
+            src: 'https://wetwork.s3.us-east-1.amazonaws.com/not_another_day.wav',
+            title: 'not_another_day.wav'
         }
     ];
 

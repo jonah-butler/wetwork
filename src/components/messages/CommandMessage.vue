@@ -1,22 +1,29 @@
 <template>
   <div class="message">
-    <p class="light-alien-green">
-      <strong>Useage</strong> help [command]
-      <br>
-      <br>
-      <pre class="ff__dina">
-  <strong>Commands</strong>
-  ______________________
-      </pre>
-      <pre class="ff__dina" v-for="command in commands" :key="command">
-  {{ command }}
-      </pre>
-    </p>
+    <div class="light-alien-green">
+      
+      <div>
+        <strong>Useage</strong> [command]
+      </div>
+
+      <div class="ff__dina mt-3 ml-3">
+        <strong>Commands</strong>
+        <div>
+          ______________________
+        </div>
+
+        <div class="d__flex">
+          <div class="ff__dina mt-2">
+            {{ commandsPretty }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import routeData from '@/data';
 
 export default defineComponent({
@@ -24,13 +31,17 @@ export default defineComponent({
   setup() {
     const commands = Object.keys(routeData);
 
+    const commandsPretty = computed((): string => {
+      return commands.join(", ");
+    })
+
     return {
-      commands
+      commandsPretty,
     };
   }
 });
 </script>
 
-<style>
+<style scoped>
 
 </style>

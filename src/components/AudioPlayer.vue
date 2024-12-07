@@ -3,7 +3,7 @@
     <audio @timeupdate="updateSlider" ref="audio" preload="metadata" loop>
       <source :src="src">
     </audio>
-    <p class="container-title">.MP3</p>
+    <p class="container-title">.WAV</p>
     <div class="title-container">
       <p class="song-title">{{ title }}</p>
     </div>
@@ -202,30 +202,11 @@ input[type="range"]::-ms-track {
     cursor: pointer;
     background: #76e582;
 }
-/* input[type="range"]::-ms-fill-lower {
-    background-color: #007db5;
-} */
-/* input[type="range"]::-ms-fill-upper {
-    background: linear-gradient(to right, rgba(0, 125, 181, 0.6) var(--buffered-width), rgba(0, 125, 181, 0.2) var(--buffered-width));
-} */
-/* input[type="range"]::-ms-thumb {
-    box-sizing: content-box;
-    border: 1px solid #007db5;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    background-color: #fff;
-    cursor: pointer;
-}
-input[type="range"]:active::-ms-thumb {
-    transform: scale(1.2);
-    background: #007db5;
-} */
 .title-container {
   overflow: hidden;
 }
 .container-title {
-    background: #132616;
+    background: #161717;
     position: absolute;
     top: -33px;
     right: 41px;

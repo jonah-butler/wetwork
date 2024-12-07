@@ -1,10 +1,10 @@
 <template>
-  <section class="bg__dark-alien-green w-100vw h-100 terminal">
+  <section class="bg__dark-alien-black w-100vw h-100 terminal">
     <div ref="terminalInner" class="terminal-inner">
       <keep-alive>
         <component
-          v-for="message in messages"
-          :key="message.message"
+          v-for="(message, i) in messages"
+          :key="i"
           :is="message.cachedInput"
           :inputMessage="message.input"
         >
@@ -22,8 +22,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  shallowRef,
-  watch,
   triggerRef,
   ref,
   onUpdated,
@@ -34,6 +32,7 @@ import MessageHistory from "@/interfaces/messageHistory.interface";
 import TerminalInput from "@/components/TerminalInput.vue";
 import routeData from "@/data";
 import ErrorMessage from "@/components/messages/Error.vue";
+import { messages } from "@/composables/messages";
 
 export default defineComponent({
   name: "TerminalLanding",
@@ -44,24 +43,12 @@ export default defineComponent({
   },
   setup() {
     const terminalInner = ref<HTMLDivElement>();
-    const messages = shallowRef<Array<MessageHistory>>([
-      {
-        cachedInput: CachedInput,
-        component: BannerMessage,
-        input: "banner",
-      },
-    ]);
-
-    watch(messages, () => {
-      console.log();
-    });
 
     onUpdated(() => {
       scrollToBottom();
     });
 
     const buildComponentInstructions = (command: string): MessageHistory => {
-      console.log(command);
       return {
         cachedInput: CachedInput,
         component: routeData[command].component,
@@ -115,7 +102,7 @@ export default defineComponent({
 }
 
 .terminal-inner {
-  border: 3px solid #6a7729;
+  border: 3px solid #76e582;
   width: calc(100% - 20px);
   height: calc(100% - 20px);
   padding: 10px;
@@ -123,6 +110,12 @@ export default defineComponent({
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
 .message {
   text-align: left;
   margin: 15px 0;
