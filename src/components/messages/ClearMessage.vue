@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { messages } from '@/composables/messages';
+import { resetState } from '@/composables/messages';
 
-messages.value = [];
+resetState();
 </script>
 
 <template>

@@ -1,10 +1,9 @@
 <template>
-  <div class="message">
+  <div class="message d__flex flex-wrap" v-if="audioSources">
       <AudioPlayer
-        v-for="source in sources"
+        v-for="source in audioSources"
         :key="source.title"
-        :src="source.src"
-        :title="source.title"
+        :source="source"
         :currentlyPlaying="currentlyPlaying"
         @isPlaying="togglePlayback"
       />
@@ -12,8 +11,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import AudioPlayer from '@/components/AudioPlayer.vue';
+import { listAllObjects, WW_ARN, WW_BUCKET } from '@/services/aws/s3';
+
+export interface AudioSource {
+  source: string;
+  title: string;
+}
 
 export default defineComponent({
   name: "AudioMessage",
@@ -21,28 +26,37 @@ export default defineComponent({
       AudioPlayer
   },
   setup() {
+
+    onMounted((): void => {
+      getSongKeys();
+    });
+
     const currentlyPlaying = ref('');
-    const sources = [
-        {
-            src: 'https://wetwork.s3.us-east-1.amazonaws.com/bite_my_tongue.wav',
-            title: 'bite_my_tongue.mp3'
-        },
-        {
-            src: 'https://wetwork.s3.us-east-1.amazonaws.com/magazines_%26_bad_faith.wav',
-            title: 'magazines_&_bad_faith.wav'
-        },
-        {
-            src: 'https://wetwork.s3.us-east-1.amazonaws.com/not_another_day.wav',
-            title: 'not_another_day.wav'
-        }
-    ];
+    const audioSources = ref<AudioSource[]>([]);
 
     const togglePlayback = (source: string) => {
         currentlyPlaying.value = source;
+    };
+
+    const getSongKeys = async (): Promise<void> => {
+      try {
+        const objects = await listAllObjects(WW_BUCKET);
+        audioSources.value = objects.map((o) => {
+          const key = o.Key || "";
+
+          return {
+            title: key,
+            source: WW_ARN + key,
+          }
+        });
+      } catch(err) {
+        // handle this
+        console.log(err);
+      }
     }
 
     return {
-        sources,
+        audioSources,
         currentlyPlaying,
         togglePlayback
     }

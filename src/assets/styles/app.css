@@ -1,64 +1,11 @@
-@font-face {
-  font-family: "DinaRemaster";
-  src: url("@/assets/fonts/Dina/DinaRemasterCollection.ttc");
-}
+@import "./reset.css";
+@import "./colors.css";
 
-.dark-alien-green {
-  color: #132616;
-}
-.bg__dark-alien-green {
-  background-color: #132616;
-}
+/* 
 
-.bg__dark-alien-black {
-  background-color: #161717;
-}
+SIZING
 
-.light-alien-green {
-  color: #76e582;
-}
-.bg__light-alien-green {
-  background-color: #76e582;
-}
-
-.vibrant-alien-yellow {
-  color: #d2fc00;
-}
-.bg__dirty-alien-yellow {
-  background-color: #6a7729;
-}
-
-.light-alien-purple {
-  color: #48597d;
-}
-.bg__light-alien-purple {
-  background-color: #48597d;
-}
-
-.dark-alien-blood {
-  color: #732a27;
-}
-.bg__dark-alien-blood {
-  background-color: #732a27;
-}
-
-.light-alien-gray {
-  color: #5e766e;
-}
-.bg__light-alien-gray {
-  background-color: #5e766e;
-}
-
-.light-alien-blue {
-  color: #1bbde9;
-}
-.bg__light-alien-blue {
-  background-color: #2c5f6d;
-}
-
-.white {
-  color: #fff;
-}
+*/
 
 .w-100 {
   width: 100%;
@@ -76,6 +23,12 @@
   height: 100%;
 }
 
+/* 
+
+DISPLAY & POSITIONING
+
+*/
+
 .d__flex {
   display: flex;
 }
@@ -87,9 +40,19 @@
   flex-direction: column;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .justify-content__center {
   justify-content: center;
 }
+
+/* 
+
+FONTS
+
+*/
 
 .ff__dina {
   font-family: "DinaRemaster" !important;
@@ -99,50 +62,41 @@ pre.ff__dina {
   font-family: "DinaRemaster", monospace !important;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
+/* 
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #132616;
-}
+SPACING
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #132616;
-}
+*/
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #132616;
-}
-
+/* margin top */
 .mt-1 {
   margin-top: 0.25rem;
 }
-
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-
 .mt-2 {
   margin-top: 0.5rem;
 }
-
 .mt-3 {
   margin-top: 0.75rem;
 }
+.mt-4 {
+  margin-top: 1rem;
+}
 
+/* margin bottom */
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
 .mb-2 {
   margin-bottom: 0.5rem;
 }
-
 .mb-3 {
   margin-bottom: 0.75rem;
 }
+.mb-4 {
+  margin-bottom: 1rem;
+}
 
+/* margin left */
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -156,6 +110,44 @@ pre.ff__dina {
   margin-left: 1rem;
 }
 
+/* margin right */
+.mr-1 {
+  margin-right: 0.25rem;
+}
+.mr-2 {
+  margin-right: 0.5rem;
+}
+.mr-3 {
+  margin-right: 0.75rem;
+}
+.mr-4 {
+  margin-right: 1rem;
+}
+
+/* margin Y */
+.my-1 {
+  margin: 0.25rem 0;
+}
+.my-2 {
+  margin: 0.5rem 0;
+}
 .my-3 {
   margin: 0.75rem 0;
+}
+.my-4 {
+  margin: 1rem 0;
+}
+
+/* margin X */
+.mx-1 {
+  margin: 0 0.25rem;
+}
+.mx-2 {
+  margin: 0 0.5rem;
+}
+.mx-3 {
+  margin: 0 0.75;
+}
+.mx-4 {
+  margin: 0 1rem;
 }

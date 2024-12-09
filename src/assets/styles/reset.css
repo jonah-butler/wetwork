@@ -2,3 +2,22 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
+@font-face {
+  font-family: "DinaRemaster";
+  src: url("@/assets/fonts/Dina/DinaRemasterCollection.ttc");
+}
+
+/* webkit scroll bar reset */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #132616;
+}
+::-webkit-scrollbar-thumb {
+  background: #132616;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #132616;
+}

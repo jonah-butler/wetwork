@@ -14,8 +14,8 @@
         >
           <strong>{{ show.date }}</strong>
           <p v-for="key in Object.keys(show)" :key="key">
-            --> {{ key.toUpperCase() }} <br />
-            ----> {{ show[key as keyof Show] }}
+            > {{ key.toUpperCase() }} <br />
+            >> {{ show[key as keyof Show] }}
           </p>
         </div>
       </div>

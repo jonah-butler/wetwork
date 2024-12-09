@@ -1,11 +1,11 @@
 <template>
-  <div id="audio-player-container">
+  <div id="audio-player-container" class="mb-3 mr-3">
     <audio @timeupdate="updateSlider" ref="audio" preload="metadata" loop>
-      <source :src="src">
+      <source :src="source.source">
     </audio>
-    <p class="container-title">.WAV</p>
-    <div class="title-container">
-      <p class="song-title">{{ title }}</p>
+    <p class="container-title">{{ extension.toUpperCase() }}</p>
+    <div ref="titleContainer" class="title-container">
+      <p ref="songTitle" class="song-title">{{ source.title }}</p>
     </div>
     <svg v-if="isPaused" @click="togglePlayback" id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
       <polygon class="play-btn__svg" points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"/>
@@ -19,7 +19,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, SetupContext, watch } from 'vue';
+import { defineComponent, computed, ref, SetupContext, watch, onMounted } from 'vue';
+import type { AudioSource } from "@/components/messages/Audio.vue";
 
 export default defineComponent({
   name: 'AudioPlayer',
@@ -28,13 +29,9 @@ export default defineComponent({
       type: String,
       required: true
     },
-    src: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
+    source: {
+      type: Object as () => AudioSource,
+      required: true,
     }
   },
   setup(props, context: SetupContext) {
@@ -42,6 +39,47 @@ export default defineComponent({
     const isPaused = ref(true);
     const audio = ref<HTMLAudioElement>();
     const rangeData = ref(0);
+    const songTitle = ref<HTMLParagraphElement>();
+    const titleContainer = ref<HTMLDivElement>();
+
+    onMounted((): void => {
+      if (!songTitle.value || !titleContainer.value) return;
+
+      initMarquee();
+
+    });
+
+    const extension = computed((): string => {
+      return props.source.title.split(".")[1];
+    })
+
+    const initMarquee = (): void => {
+      const min = 0.5;
+      const max = 1;
+
+      if (!songTitle.value || !titleContainer.value) return;
+
+      let speed = parseFloat((Math.random() * (max - min) + min).toFixed(2));
+
+      let containerWidth = titleContainer.value.offsetWidth;
+      let titleWidth = songTitle.value.offsetWidth;
+      let position = containerWidth - titleWidth;
+
+      function animate(): void {
+        position -= speed;
+        if (position < -titleWidth) {
+          position = containerWidth;
+        }
+
+        if(songTitle.value) {
+          songTitle.value.style.transform = `translateX(${position}px)`;
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    };
 
     const updateSlider = () => {
       rangeData.value = Math.round((audio.value!.currentTime / audio.value!.duration) * 100);
@@ -58,7 +96,7 @@ export default defineComponent({
       if(isPaused.value) {
 
         audio.value!.play();
-        context.emit('isPlaying', props.src);
+        context.emit('isPlaying', props.source.source);
 
       } else {
 
@@ -71,7 +109,7 @@ export default defineComponent({
     }
 
     watch(() => props.currentlyPlaying, (n) => {
-      if(n !== props.src) {
+      if(n !== props.source.source) {
         audio.value!.pause();
         isPlaying.value = false;
         isPaused.value = true;
@@ -80,12 +118,15 @@ export default defineComponent({
 
     return {
       audio,
+      extension,
       isPlaying,
       isPaused,
       togglePlayback,
       updateSlider,
       rangeData,
-      updateAudioTimeStamp
+      updateAudioTimeStamp,
+      songTitle,
+      titleContainer,
     };
   }
 });
@@ -93,8 +134,8 @@ export default defineComponent({
 
 <style>
 .song-title {
-   animation: scroll-left 8s linear infinite;
    margin: 0px;
+   width: fit-content;
 }
 @keyframes scroll-left {
  0%   {
@@ -105,35 +146,35 @@ export default defineComponent({
  }
 }
 #audio-player-container {
-    --seek-before-width: 0%;
-    --volume-before-width: 100%;
-    --buffered-width: 0%;
-    position: relative;
-    width: 95%;
-    max-width: 250px;
-    height: 40px;
-    background: transparent;
-    color: #76e582;
-    border: 1px solid #6a7729;
-    padding: 15px;
-    margin-bottom: 15px;
+  --seek-before-width: 0%;
+  --volume-before-width: 100%;
+  --buffered-width: 0%;
+  position: relative;
+  width: 95%;
+  max-width: 250px;
+  height: 40px;
+  background: transparent;
+  color: #76e582;
+  border: 1px solid #6a7729;
+  padding: 15px;
+  margin-bottom: 15px;
 }
 #audio-player-container::before {
-    position: absolute;
-    content: '';
-    width: calc(100% + 4px);
-    height: calc(100% + 4px);
-    left: -2px;
-    top: -2px;
-    background: linear-gradient(to left, #007db5, #ff8a00);
-    z-index: -1;
+  position: absolute;
+  content: '';
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  left: -2px;
+  top: -2px;
+  background: linear-gradient(to left, #007db5, #ff8a00);
+  z-index: -1;
 }
 
 #play-icon, #pause-icon {
-    width: 40px;
-    fill: #76e582;
-    position: relative;
-    top: -8px;
+  width: 40px;
+  fill: #76e582;
+  position: relative;
+  top: -8px;
 }
 output {
     display: inline-block;
@@ -141,7 +182,6 @@ output {
     text-align: center;
     font-size: 20px;
     margin: 10px 2.5% 0 5%;
-    float: left;
     clear: left;
 }
 input[type="range"] {

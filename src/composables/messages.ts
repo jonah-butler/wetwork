@@ -11,6 +11,17 @@ const messages = shallowRef<Array<MessageHistory>>([
   },
 ]);
 
+const resetState = (): void => {
+  messages.value = [];
+  
+  messages.value.push(  {
+    cachedInput: CachedInput,
+    component: BannerMessage,
+    input: "banner",
+  });
+}
+
 export {
   messages,
+  resetState,
 };
