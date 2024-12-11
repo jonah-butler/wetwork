@@ -1,6 +1,6 @@
 <template>
   <div id="audio-player-container" class="mb-3 mr-3">
-    <audio @timeupdate="updateSlider" ref="audio" preload="metadata" loop>
+    <audio @timeupdate="updateSlider" ref="audio" loop>
       <source :src="source.source">
     </audio>
     <p class="container-title">{{ extension.toUpperCase() }}</p>
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, SetupContext, watch, onMounted } from 'vue';
+import { defineComponent, computed, ref, watch } from 'vue';
 import type { AudioSource } from "@/components/messages/Audio.vue";
 
 export default defineComponent({
@@ -34,52 +34,18 @@ export default defineComponent({
       required: true,
     }
   },
-  setup(props, context: SetupContext) {
+  setup(props) {
     const isPlaying = ref(false);
     const isPaused = ref(true);
     const audio = ref<HTMLAudioElement>();
     const rangeData = ref(0);
-    const songTitle = ref<HTMLParagraphElement>();
-    const titleContainer = ref<HTMLDivElement>();
+    const songTitle = ref<HTMLParagraphElement | null>(null);
+    const titleContainer = ref<HTMLDivElement | null>(null);
+    const marqueeStyle = ref<{ animationDuration: string; animationName: string } | null>(null);
 
-    onMounted((): void => {
-      if (!songTitle.value || !titleContainer.value) return;
-
-      initMarquee();
-
+    const extension = computed(() => {
+      return props.source.title.split(".").pop()?.toUpperCase() || "";
     });
-
-    const extension = computed((): string => {
-      return props.source.title.split(".")[1];
-    })
-
-    const initMarquee = (): void => {
-      const min = 0.5;
-      const max = 1;
-
-      if (!songTitle.value || !titleContainer.value) return;
-
-      let speed = parseFloat((Math.random() * (max - min) + min).toFixed(2));
-
-      let containerWidth = titleContainer.value.offsetWidth;
-      let titleWidth = songTitle.value.offsetWidth;
-      let position = containerWidth - titleWidth;
-
-      function animate(): void {
-        position -= speed;
-        if (position < -titleWidth) {
-          position = containerWidth;
-        }
-
-        if(songTitle.value) {
-          songTitle.value.style.transform = `translateX(${position}px)`;
-        }
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-    };
 
     const updateSlider = () => {
       rangeData.value = Math.round((audio.value!.currentTime / audio.value!.duration) * 100);
@@ -92,25 +58,18 @@ export default defineComponent({
     };
 
     const togglePlayback = () => {
-
-      if(isPaused.value) {
-
+      if (isPaused.value) {
         audio.value!.play();
-        context.emit('isPlaying', props.source.source);
-
       } else {
-
         audio.value!.pause();
-
       }
-
       isPlaying.value = !isPlaying.value;
       isPaused.value = !isPaused.value;
-    }
+    };
 
-    watch(() => props.currentlyPlaying, (n) => {
-      if(n !== props.source.source) {
-        audio.value!.pause();
+    watch(() => props.currentlyPlaying, (newVal) => {
+      if (newVal !== props.source.source) {
+        audio.value?.pause();
         isPlaying.value = false;
         isPaused.value = true;
       }
@@ -125,6 +84,7 @@ export default defineComponent({
       updateSlider,
       rangeData,
       updateAudioTimeStamp,
+      marqueeStyle,
       songTitle,
       titleContainer,
     };
@@ -132,26 +92,30 @@ export default defineComponent({
 });
 </script>
 
+
 <style>
+.title-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 20px;
+  white-space: nowrap;
+}
+
 .song-title {
-   margin: 0px;
-   width: fit-content;
+  white-space: nowrap;
+  margin: 0;
+  font-size: 14px;
 }
-@keyframes scroll-left {
- 0%   {
- transform: translateX(100%); 		
- }
- 100% {
- transform: translateX(-100%); 
- }
-}
+
+
 #audio-player-container {
   --seek-before-width: 0%;
   --volume-before-width: 100%;
   --buffered-width: 0%;
   position: relative;
   width: 95%;
-  max-width: 250px;
+  max-width: 280px;
   height: 40px;
   background: transparent;
   color: #76e582;

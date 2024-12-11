@@ -1,11 +1,11 @@
 <template>
   <div class="message d__flex flex-wrap" v-if="audioSources">
       <AudioPlayer
-        v-for="source in audioSources"
-        :key="source.title"
+        v-for="(source, i) in audioSources"
+        :key="i"
         :source="source"
         :currentlyPlaying="currentlyPlaying"
-        @isPlaying="togglePlayback"
+        @isPlaying="togglePlayback"    
       />
   </div>
 </template>
