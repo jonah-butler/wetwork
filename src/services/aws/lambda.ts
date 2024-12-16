@@ -5,6 +5,7 @@ export interface SendEmailPayload {
   message: string;
   returnAddress: string;
   from: string;
+  [key: string]: string;
 }
 
 interface SendEmailResponse {
