@@ -8,7 +8,7 @@
           :is="message.cachedInput"
           :inputMessage="message.input"
         >
-          <component :is="message.component" />
+          <component :is="message.component" :ref="setComponentRef" />
         </component>
       </keep-alive>
       <TerminalInput
@@ -25,6 +25,7 @@ import {
   triggerRef,
   ref,
   onUpdated,
+  type ComponentPublicInstance,
 } from "vue";
 import BannerMessage from "@/components/messages/Banner.vue";
 import CachedInput from "@/components/messages/CachedInput.vue";
@@ -66,10 +67,46 @@ export default defineComponent({
       };
     };
 
+    type CloseableComponent = ComponentPublicInstance & {
+      closeForm: () => void;
+    }    
+
+    let lastContactIndex = -1;
+    let componentsRendered = 0;
+
+    let contactIndexes: CloseableComponent[] = [];
+
+    const setComponentRef = (el: CloseableComponent): void => {
+      componentsRendered++;
+
+      if (el && "closeForm" in el && lastContactIndex <= componentsRendered) {
+        contactIndexes.push(el);
+        lastContactIndex = componentsRendered;
+      }
+
+      if(componentsRendered >= messages.value.length) {
+        componentsRendered = 0;
+
+        if(contactIndexes.length === 2) {
+          contactIndexes[0].closeForm();
+        }
+
+        contactIndexes = [];
+      }
+
+      // reset index when clearing
+      if (messages.value.length === 1) {
+        lastContactIndex = -1;
+      }
+    };
+
     const loadComponent = (input: string) => {
       const message = buildComponentInstructions(input);
+      
       messages.value.push(message);
+
       triggerRef(messages);
+
     };
 
     const loadDefaultErrComponent = (input: string) => {
@@ -87,6 +124,7 @@ export default defineComponent({
       CachedInput,
       terminalInner,
       loadComponent,
+      setComponentRef,
       loadDefaultErrComponent,
     };
   },

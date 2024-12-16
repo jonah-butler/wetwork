@@ -5,6 +5,7 @@ import AudioMessage from "@/components/messages/Audio.vue";
 import ShowMessage from "@/components/messages/ShowMessage.vue";
 import ClearMessage from "./components/messages/ClearMessage.vue";
 import SocialMessage from "./components/messages/SocialMessage.vue";
+import ContactMessage from "./components/messages/ContactMessage.vue";
 
 interface RouteComponent {
   component: Component;
@@ -32,7 +33,10 @@ const routes: Routes = {
   },
   socials: {
     component: SocialMessage,
-  }
+  },
+  contact: {
+    component: ContactMessage,
+  },
 };
 
 export default routes;

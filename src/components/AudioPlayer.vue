@@ -1,20 +1,25 @@
 <template>
   <div id="audio-player-container" class="mb-3 mr-3">
-    <audio @timeupdate="updateSlider" ref="audio" loop>
+    <audio @canplay="updateLoadedState" @timeupdate="updateSlider" preload="auto" ref="audio" loop>
       <source :src="source.source">
     </audio>
     <p class="container-title">{{ extension.toUpperCase() }}</p>
     <div ref="titleContainer" class="title-container">
       <p ref="songTitle" class="song-title">{{ source.title }}</p>
     </div>
-    <svg v-if="isPaused" @click="togglePlayback" id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-      <polygon class="play-btn__svg" points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"/>
-    </svg> 
-    <svg v-if="isPlaying" @click="togglePlayback" id="pause-icon" width="100" viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="64" y="25" width="20" height="50"/>
-      <rect x="24" y="25" width="20" height="50"/>
-    </svg>
-    <input @input="updateAudioTimeStamp" type="range" id="seek-slider" min="0" max="100" v-model="rangeData" step="1">
+    <div class="d__flex">
+      <div v-if="!isLoaded" id="loader">
+        <div class="loader-bar"></div>
+      </div>
+      <svg v-if="isPaused && isLoaded" @click="togglePlayback" id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+        <polygon class="play-btn__svg" points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"/>
+      </svg> 
+      <svg v-if="isPlaying && isLoaded" @click="togglePlayback" id="pause-icon" width="100" viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="64" y="25" width="20" height="50"/>
+        <rect x="24" y="25" width="20" height="50"/>
+      </svg>
+      <input @input="updateAudioTimeStamp" type="range" id="seek-slider" min="0" max="100" v-model="rangeData" step="1">
+    </div>
   </div>
 </template>
 
@@ -42,6 +47,7 @@ export default defineComponent({
     const songTitle = ref<HTMLParagraphElement | null>(null);
     const titleContainer = ref<HTMLDivElement | null>(null);
     const marqueeStyle = ref<{ animationDuration: string; animationName: string } | null>(null);
+    const isLoaded = ref(false);
 
     const extension = computed(() => {
       return props.source.title.split(".").pop()?.toUpperCase() || "";
@@ -67,6 +73,10 @@ export default defineComponent({
       isPaused.value = !isPaused.value;
     };
 
+    const updateLoadedState = (): void => {
+      isLoaded.value = true;
+    };
+
     watch(() => props.currentlyPlaying, (newVal) => {
       if (newVal !== props.source.source) {
         audio.value?.pause();
@@ -77,6 +87,8 @@ export default defineComponent({
 
     return {
       audio,
+      updateLoadedState,
+      isLoaded,
       extension,
       isPlaying,
       isPaused,
@@ -94,6 +106,45 @@ export default defineComponent({
 
 
 <style>
+#loader {
+  width: 40px;
+  height: 40px;
+  fill: #76e582;
+  position: relative;
+  top: -8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader-bar {
+  width: 7px;
+  height: 7px;
+  background: #76e582;
+  animation: 1s infinite back-and-forth;
+  position: relative;
+  top: -2px;
+}
+@keyframes back-and-forth{
+  0% {
+    translate: 0 0;
+  }
+
+  25% {
+    translate: 4px 0;
+  }
+
+  50% {
+    translate: 0 0;
+  }
+
+  75% {
+    translate: -4px 0;
+  }
+
+  100% {
+    translate: 0 0;
+  }
+}
 .title-container {
   overflow: hidden;
   position: relative;
@@ -101,14 +152,11 @@ export default defineComponent({
   height: 20px;
   white-space: nowrap;
 }
-
 .song-title {
   white-space: nowrap;
   margin: 0;
   font-size: 14px;
 }
-
-
 #audio-player-container {
   --seek-before-width: 0%;
   --volume-before-width: 100%;
@@ -154,7 +202,6 @@ input[type="range"] {
     width: 63%;
     padding: 0;
     height: 19px;
-    top: -18px;
     outline: none;
     background: transparent;
 }
