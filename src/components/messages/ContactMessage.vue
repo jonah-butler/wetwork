@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, nextTick, defineExpose, computed, } from "vue";
+import Loader from "@/components/AnimatedLoader.vue";
+import {
+  ref,
+  reactive,
+  onMounted,
+  nextTick,
+  defineExpose,
+  computed,
+} from "vue";
 import { type SendEmailPayload, sendEmail } from "@/services/aws/lambda";
 
 const step = ref(0);
@@ -11,7 +19,7 @@ const data = reactive<SendEmailPayload>({
   subject: "",
   message: "",
   returnAddress: "",
-  from: "",  
+  from: "",
 });
 
 const formErrors = reactive<Record<string, string>>({
@@ -19,7 +27,9 @@ const formErrors = reactive<Record<string, string>>({
   message: "",
   returnAddress: "",
   from: "",
-})
+});
+
+const submissionResponse = ref("");
 
 onMounted((): void => {
   input0.value?.focus();
@@ -47,7 +57,7 @@ const progress = (key: string): void => {
 
   validateField(key);
 
-  if(formErrors[key] !== "") return;
+  if (formErrors[key] !== "") return;
 
   if (closed.value) return;
 
@@ -66,11 +76,33 @@ const progress = (key: string): void => {
     if (step.value <= 3) {
       (document.querySelector(".secondary-input") as HTMLInputElement).focus();
     }
-  })
+  });
 };
 
 const submit = async (): Promise<void> => {
-  console.log("sending email");
+  if (
+    !isSubjectValid.value ||
+    !isMessageValid.value ||
+    !isValidEmail.value ||
+    !isValidFrom.value
+  )
+    return;
+
+  try {
+    const response = await sendEmail(data);
+    if (response.success) {
+      submissionResponse.value = "Message sent";
+    }
+  } catch (err) {
+    if (err instanceof Error) {
+      submissionResponse.value = err.message;
+      return;
+    }
+
+    submissionResponse.value = "Failed to send message";
+  } finally {
+    closed.value = true;
+  }
 };
 
 const update = (stepToUpdate: number): void => {
@@ -93,12 +125,22 @@ defineExpose({
     <section class="message" v-if="step === 0">
       <div>---- Subject</div>
       <div class="mt-3 d__flex">
-        <span class="caret mr-2"> > </span>
-        <input :disabled="closed" v-model="data.subject" @keypress.enter="progress('subject')" ref="input0" placeholder="enter subject" class="secondary-input" type="text">
+        <span class="caret mr-2">></span>
+        <input
+          :disabled="closed"
+          v-model="data.subject"
+          @keypress.enter="progress('subject')"
+          ref="input0"
+          placeholder="enter subject"
+          class="secondary-input"
+          type="text"
+        />
       </div>
 
       <div class="ml-4 mt-2 d__flex">
-        <button v-if="!closed" @click="progress('subject')" class="btn-primary">next -></button>
+        <button v-if="!closed" @click="progress('subject')" class="btn-primary">
+          <Loader />
+        </button>
         <div class="font-size-13 ml-2">{{ formErrors.subject }}</div>
       </div>
     </section>
@@ -107,12 +149,20 @@ defineExpose({
     <section class="message" v-if="step === 1">
       <div>---- Message</div>
       <div class="mt-3 d__flex">
-        <span class="caret mr-2"> > </span>
-        <textarea :disabled="closed" v-model="data.message" ref="input1" class="secondary-input text-area" placeholder="enter message"></textarea>
+        <span class="caret mr-2">></span>
+        <textarea
+          :disabled="closed"
+          v-model="data.message"
+          ref="input1"
+          class="secondary-input text-area"
+          placeholder="enter message"
+        ></textarea>
       </div>
 
       <div class="ml-4 mt-2 d__flex">
-        <button v-if="!closed" @click="progress('message')" class="btn-primary">next -></button>
+        <button v-if="!closed" @click="progress('message')" class="btn-primary">
+          next ->
+        </button>
         <div class="font-size-13 ml-2">{{ formErrors.message }}</div>
       </div>
     </section>
@@ -121,12 +171,26 @@ defineExpose({
     <section class="message" v-if="step === 2">
       <div>---- Return Address</div>
       <div class="mt-3 d__flex">
-        <span class="caret mr-2"> > </span>
-        <input :disabled="closed" v-model="data.returnAddress" @keypress.enter="progress('returnAddress')" ref="input2" placeholder="enter email" class="secondary-input" type="text">
+        <span class="caret mr-2">></span>
+        <input
+          :disabled="closed"
+          v-model="data.returnAddress"
+          @keypress.enter="progress('returnAddress')"
+          ref="input2"
+          placeholder="enter email"
+          class="secondary-input"
+          type="text"
+        />
       </div>
 
       <div class="ml-4 mt-2 d__flex">
-        <button v-if="!closed" @click="progress('returnAddress')" class="btn-primary">next -></button>
+        <button
+          v-if="!closed"
+          @click="progress('returnAddress')"
+          class="btn-primary"
+        >
+          next ->
+        </button>
         <div class="font-size-13 ml-2">{{ formErrors.returnAddress }}</div>
       </div>
     </section>
@@ -135,12 +199,22 @@ defineExpose({
     <section class="message" v-if="step === 3">
       <div>---- From</div>
       <div class="mt-3 d__flex">
-        <span class="caret mr-2"> > </span>
-        <input :disabled="closed" v-model="data.from" @keypress.enter="progress('from')" ref="input3" placeholder="enter name" class="secondary-input" type="text">
+        <span class="caret mr-2">></span>
+        <input
+          :disabled="closed"
+          v-model="data.from"
+          @keypress.enter="progress('from')"
+          ref="input3"
+          placeholder="enter name"
+          class="secondary-input"
+          type="text"
+        />
       </div>
 
       <div class="ml-4 mt-2 d__flex">
-        <button v-if="!closed" @click="progress('from')" class="btn-primary">next -></button>
+        <button v-if="!closed" @click="progress('from')" class="btn-primary">
+          next ->
+        </button>
         <div class="font-size-13 ml-2">{{ formErrors.from }}</div>
       </div>
     </section>
@@ -152,9 +226,9 @@ defineExpose({
       <div @click="update(0)" class="mt-2 mb-4">
         <div class="header-container light-alien-green font-size-15 d__flex">
           <div class="caret-container mr-2">
-            <span class="c-1"> > </span>
-            <span class="c-2"> > </span>
-            <span class="c-3"> > </span>
+            <span class="c-1">></span>
+            <span class="c-2">></span>
+            <span class="c-3">></span>
           </div>
           Subject
         </div>
@@ -166,9 +240,9 @@ defineExpose({
       <div @click="update(1)" class="mt-2 mb-4">
         <div class="header-container light-alien-green font-size-15 d__flex">
           <div class="caret-container mr-2">
-            <span class="c-1"> > </span>
-            <span class="c-2"> > </span>
-            <span class="c-3"> > </span>
+            <span class="c-1">></span>
+            <span class="c-2">></span>
+            <span class="c-3">></span>
           </div>
           Message
         </div>
@@ -180,9 +254,9 @@ defineExpose({
       <div @click="update(2)" class="mt-2 mb-4">
         <div class="header-container light-alien-green font-size-15 d__flex">
           <div class="caret-container mr-2">
-            <span class="c-1"> > </span>
-            <span class="c-2"> > </span>
-            <span class="c-3"> > </span>
+            <span class="c-1">></span>
+            <span class="c-2">></span>
+            <span class="c-3">></span>
           </div>
           Return Address
         </div>
@@ -194,9 +268,9 @@ defineExpose({
       <div @click="update(3)" class="mt-2 mb-4">
         <div class="header-container light-alien-green font-size-15 d__flex">
           <div class="caret-container mr-2">
-            <span class="c-1"> > </span>
-            <span class="c-2"> > </span>
-            <span class="c-3"> > </span>
+            <span class="c-1">></span>
+            <span class="c-2">></span>
+            <span class="c-3">></span>
           </div>
           From
         </div>
@@ -206,7 +280,9 @@ defineExpose({
       </div>
 
       <div class="ml-4 mt-2">
-        <button v-if="!closed" @click="submit" class="btn-primary">submit -></button>
+        <button v-if="!closed" @click="submit" class="btn-primary">
+          <Loader />
+        </button>
       </div>
     </section>
   </div>
@@ -219,7 +295,7 @@ defineExpose({
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
   font-family: "DinaRemaster";
-  font-size: .9rem;
+  font-size: 0.9rem;
   width: 300px;
   padding: 5px;
 }
@@ -241,10 +317,10 @@ defineExpose({
   border: 1px solid #76e582;
   color: #76e582;
   font-family: "DinaRemaster";
-  font-size: .9rem;
+  font-size: 0.9rem;
   background: transparent;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 .btn-primary:hover {
   color: white;
@@ -265,7 +341,8 @@ defineExpose({
 .c-1 {
   opacity: 1;
 }
-.c-2, .c-3 {
+.c-2,
+.c-3 {
   position: absolute;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
@@ -290,13 +367,16 @@ defineExpose({
   animation-delay: 0.25s;
 }
 @keyframes fadeInOut {
-  0%, 20% {
+  0%,
+  20% {
     opacity: 0;
   }
-  30%, 50% {
+  30%,
+  50% {
     opacity: 1;
   }
-  60%, 100% {
+  60%,
+  100% {
     opacity: 0;
   }
 }
