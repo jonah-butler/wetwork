@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, nextTick, defineExpose } from "vue";
+import { ref, reactive, onMounted, nextTick, defineExpose, computed, } from "vue";
 import { type SendEmailPayload, sendEmail } from "@/services/aws/lambda";
 
 const step = ref(0);
@@ -11,14 +11,44 @@ const data = reactive<SendEmailPayload>({
   subject: "",
   message: "",
   returnAddress: "",
-  from: "",
+  from: "",  
 });
+
+const formErrors = reactive<Record<string, string>>({
+  subject: "",
+  message: "",
+  returnAddress: "",
+  from: "",
+})
 
 onMounted((): void => {
   input0.value?.focus();
 });
 
-const progress = (): void => {
+const isSubjectValid = computed((): boolean => data.subject !== "");
+const isMessageValid = computed((): boolean => data.message !== "");
+const isValidEmail = computed((): boolean => data.returnAddress.includes("@"));
+const isValidFrom = computed((): boolean => data.from !== "");
+
+const validateField = (field: string): void => {
+  if (field === "subject" && !isSubjectValid.value) {
+    formErrors[field] = "The subject field can not be empty";
+  } else if (field === "message" && !isMessageValid.value) {
+    formErrors[field] = "The message field can not be empty";
+  } else if (field === "returnAddress" && !isValidEmail.value) {
+    formErrors[field] = "The address field must be valid";
+  } else if (field === "from" && !isValidFrom.value) {
+    formErrors[field] = "The from field can not be empty";
+  }
+};
+
+const progress = (key: string): void => {
+  formErrors[key] = "";
+
+  validateField(key);
+
+  if(formErrors[key] !== "") return;
+
   if (closed.value) return;
 
   if (completedForm.value) {
@@ -64,11 +94,12 @@ defineExpose({
       <div>---- Subject</div>
       <div class="mt-3 d__flex">
         <span class="caret mr-2"> > </span>
-        <input :disabled="closed" v-model="data.subject" @keypress.enter="progress" ref="input0" placeholder="enter subject" class="secondary-input" type="text">
+        <input :disabled="closed" v-model="data.subject" @keypress.enter="progress('subject')" ref="input0" placeholder="enter subject" class="secondary-input" type="text">
       </div>
 
-      <div class="ml-4 mt-2">
-        <button v-if="!closed" @click="progress" class="btn-primary">next -></button>
+      <div class="ml-4 mt-2 d__flex">
+        <button v-if="!closed" @click="progress('subject')" class="btn-primary">next -></button>
+        <div class="font-size-13 ml-2">{{ formErrors.subject }}</div>
       </div>
     </section>
 
@@ -80,8 +111,9 @@ defineExpose({
         <textarea :disabled="closed" v-model="data.message" ref="input1" class="secondary-input text-area" placeholder="enter message"></textarea>
       </div>
 
-      <div class="ml-4 mt-2">
-        <button v-if="!closed" @click="progress" class="btn-primary">next -></button>
+      <div class="ml-4 mt-2 d__flex">
+        <button v-if="!closed" @click="progress('message')" class="btn-primary">next -></button>
+        <div class="font-size-13 ml-2">{{ formErrors.message }}</div>
       </div>
     </section>
 
@@ -90,11 +122,12 @@ defineExpose({
       <div>---- Return Address</div>
       <div class="mt-3 d__flex">
         <span class="caret mr-2"> > </span>
-        <input :disabled="closed" v-model="data.returnAddress" @keypress.enter="progress" ref="input2" placeholder="enter email" class="secondary-input" type="text">
+        <input :disabled="closed" v-model="data.returnAddress" @keypress.enter="progress('returnAddress')" ref="input2" placeholder="enter email" class="secondary-input" type="text">
       </div>
 
-      <div class="ml-4 mt-2">
-        <button v-if="!closed" @click="progress" class="btn-primary">next -></button>
+      <div class="ml-4 mt-2 d__flex">
+        <button v-if="!closed" @click="progress('returnAddress')" class="btn-primary">next -></button>
+        <div class="font-size-13 ml-2">{{ formErrors.returnAddress }}</div>
       </div>
     </section>
 
@@ -103,11 +136,12 @@ defineExpose({
       <div>---- From</div>
       <div class="mt-3 d__flex">
         <span class="caret mr-2"> > </span>
-        <input :disabled="closed" v-model="data.from" @keypress.enter="progress" ref="input3" placeholder="enter name" class="secondary-input" type="text">
+        <input :disabled="closed" v-model="data.from" @keypress.enter="progress('from')" ref="input3" placeholder="enter name" class="secondary-input" type="text">
       </div>
 
-      <div class="ml-4 mt-2">
-        <button v-if="!closed" @click="progress" class="btn-primary">next -></button>
+      <div class="ml-4 mt-2 d__flex">
+        <button v-if="!closed" @click="progress('from')" class="btn-primary">next -></button>
+        <div class="font-size-13 ml-2">{{ formErrors.from }}</div>
       </div>
     </section>
 
