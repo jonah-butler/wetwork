@@ -14,6 +14,7 @@ const step = ref(0);
 const completedForm = ref(false);
 const input0 = ref<HTMLInputElement>();
 const closed = ref(false);
+const loading = ref(false);
 
 const data = reactive<SendEmailPayload>({
   subject: "",
@@ -89,9 +90,13 @@ const submit = async (): Promise<void> => {
     return;
 
   try {
+    loading.value = true;
+    submissionResponse.value = "";
+
     const response = await sendEmail(data);
     if (response.success) {
-      submissionResponse.value = "Message sent";
+      submissionResponse.value = "message sent";
+      closed.value = true;
     }
   } catch (err) {
     if (err instanceof Error) {
@@ -101,7 +106,7 @@ const submit = async (): Promise<void> => {
 
     submissionResponse.value = "Failed to send message";
   } finally {
-    closed.value = true;
+    loading.value = false;
   }
 };
 
@@ -139,7 +144,7 @@ defineExpose({
 
       <div class="ml-4 mt-2 d__flex">
         <button v-if="!closed" @click="progress('subject')" class="btn-primary">
-          <Loader />
+          next ->
         </button>
         <div class="font-size-13 ml-2">{{ formErrors.subject }}</div>
       </div>
@@ -279,10 +284,16 @@ defineExpose({
         </div>
       </div>
 
-      <div class="ml-4 mt-2">
-        <button v-if="!closed" @click="submit" class="btn-primary">
-          <Loader />
+      <div class="ml-4 mt-2 d__flex" v-if="!closed">
+        <button :disabled="loading" v-if="!closed" @click="submit" class="btn-primary">
+          <span v-if="!loading">submit</span>
+          <Loader v-else />
         </button>
+        <span class="font-size-13 ml-2">{{ submissionResponse }}</span>
+      </div>
+
+      <div class="ml-4 mt-2" v-else>
+        <p class="white font-size-14">{{ submissionResponse }}</p>
       </div>
     </section>
   </div>
@@ -328,6 +339,14 @@ defineExpose({
 }
 .btn-primary:active {
   translate: 1px 1px;
+}
+.btn-primary:disabled {
+  color: white;
+  opacity: 0.7;
+  border: 1px solid #732a27;
+}
+.btn-primary:disabled:active {
+  translate: 0 0;
 }
 .caret-container {
   position: relative;

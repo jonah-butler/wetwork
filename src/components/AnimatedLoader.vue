@@ -7,7 +7,7 @@
 <style scoped>
 .loader {
   width: 40px;
-  height: 40px;
+  height: 15px;
   fill: #76e582;
   position: relative;
   display: flex;
@@ -18,9 +18,8 @@
   width: 7px;
   height: 7px;
   background: #76e582;
-  animation: 1s infinite back-and-forth;
+  animation: 3s infinite back-and-forth;
   position: relative;
-  top: -2px;
 }
 @keyframes back-and-forth {
   0% {

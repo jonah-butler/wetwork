@@ -21,8 +21,11 @@ export const sendEmail = async (payload: SendEmailPayload): Promise<SendEmailRes
         "Content-Type": "application/json",
       },
     });
+
+    if (response.status === 400) {
+      throw new Error("failed to send email");
+    }
     const result = await response.json();
-    console.log("THE RESULT", result);
     return result as SendEmailResponse;
   } catch (err) {
     console.log("got an error: ", err);
