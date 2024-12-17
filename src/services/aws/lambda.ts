@@ -14,6 +14,7 @@ interface SendEmailResponse {
 
 export const sendEmail = async (payload: SendEmailPayload): Promise<SendEmailResponse> => {
   try {
+    console.log("endpont: ", ENDPOINT);
     const response = await fetch(ENDPOINT, {
       method: "POST",
       body: JSON.stringify(payload),
