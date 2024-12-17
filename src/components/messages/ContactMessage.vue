@@ -227,6 +227,7 @@ defineExpose({
     <!-- verify -->
     <section class="message" v-if="step === 4">
       <div>---- Review</div>
+      <div class="font-size-13 white">click section to update</div>
 
       <div @click="update(0)" class="mt-2 mb-4">
         <div class="header-container light-alien-green font-size-15 d__flex">
@@ -285,7 +286,12 @@ defineExpose({
       </div>
 
       <div class="ml-4 mt-2 d__flex" v-if="!closed">
-        <button :disabled="loading" v-if="!closed" @click="submit" class="btn-primary">
+        <button
+          :disabled="loading"
+          v-if="!closed"
+          @click="submit"
+          class="btn-primary"
+        >
           <span v-if="!loading">submit</span>
           <Loader v-else />
         </button>
