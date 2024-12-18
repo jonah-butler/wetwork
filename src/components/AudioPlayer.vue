@@ -1,6 +1,6 @@
 <template>
   <div id="audio-player-container" class="mb-3 mr-3">
-    <audio @canplay="updateLoadedState" @timeupdate="updateSlider" preload="auto" ref="audio" loop>
+    <audio @canplay="updateLoadedState" @timeupdate="updateSlider" preload="metadata" ref="audio" loop>
       <source :src="source.source">
     </audio>
     <p class="container-title">{{ extension.toUpperCase() }}</p>
