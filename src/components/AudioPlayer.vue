@@ -1,6 +1,6 @@
 <template>
   <div id="audio-player-container" class="mb-3 mr-3">
-    <audio @canplay="updateLoadedState" @timeupdate="updateSlider" preload="metadata" ref="audio" loop>
+    <audio  @timeupdate="updateSlider" preload="none" ref="audio" loop>
       <source :src="source.source">
     </audio>
     <p class="container-title">{{ extension.toUpperCase() }}</p>
@@ -8,13 +8,13 @@
       <p ref="songTitle" class="song-title">{{ source.title }}</p>
     </div>
     <div class="d__flex">
-      <div v-if="!isLoaded" id="loader">
+      <div v-if="loading" id="loader">
         <div class="loader-bar"></div>
       </div>
-      <svg v-if="isPaused && isLoaded" @click="togglePlayback" id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+      <svg v-if="isPaused && !loading" @click="togglePlayback" id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
         <polygon class="play-btn__svg" points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"/>
       </svg> 
-      <svg v-if="isPlaying && isLoaded" @click="togglePlayback" id="pause-icon" width="100" viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg v-if="isPlaying && !loading" @click="togglePlayback" id="pause-icon" width="100" viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="64" y="25" width="20" height="50"/>
         <rect x="24" y="25" width="20" height="50"/>
       </svg>
@@ -47,7 +47,7 @@ export default defineComponent({
     const songTitle = ref<HTMLParagraphElement | null>(null);
     const titleContainer = ref<HTMLDivElement | null>(null);
     const marqueeStyle = ref<{ animationDuration: string; animationName: string } | null>(null);
-    const isLoaded = ref(false);
+    const loading = ref(false);
 
     const extension = computed(() => {
       return props.source.title.split(".").pop()?.toUpperCase() || "";
@@ -63,18 +63,26 @@ export default defineComponent({
       audio.value!.currentTime = roundedFrame;
     };
 
-    const togglePlayback = () => {
+    const togglePlayback = (): void => {
+      if (!audio.value) return;
+
       if (isPaused.value) {
-        audio.value!.play();
+        if(audio.value.readyState === 0) {
+          loading.value = true;
+          audio.value.load();
+
+          audio.value.addEventListener("canplay", (): void => {
+            loading.value = false;
+            audio.value!.play();
+          });
+        } else {
+          audio.value.play();
+        }
       } else {
-        audio.value!.pause();
+        audio.value.pause();
       }
       isPlaying.value = !isPlaying.value;
       isPaused.value = !isPaused.value;
-    };
-
-    const updateLoadedState = (): void => {
-      isLoaded.value = true;
     };
 
     watch(() => props.currentlyPlaying, (newVal) => {
@@ -87,8 +95,7 @@ export default defineComponent({
 
     return {
       audio,
-      updateLoadedState,
-      isLoaded,
+      loading,
       extension,
       isPlaying,
       isPaused,
