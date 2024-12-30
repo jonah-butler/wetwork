@@ -29,7 +29,9 @@
 .bg__light-alien-purple {
   background-color: #48597d;
 }
-
+.dark-alien-purple {
+  color: #bf3be3;
+}
 .dark-alien-blood {
   color: #732a27;
 }

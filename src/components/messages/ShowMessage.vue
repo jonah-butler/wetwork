@@ -14,9 +14,31 @@
         >
           <strong>{{ show.date }}</strong>
           <p v-for="key in Object.keys(show)" :key="key">
-            <span class="white">> {{ key.toUpperCase() }} <br /></span>
-
-            <span>>> {{ show[key as keyof Show] }}</span>
+            <span v-if="key === 'tickets'">
+              <span class="white">> {{ key.toUpperCase() }} <br /></span>
+              <span>>> <a target="_blank" class="dark-alien-purple" :href="show.tickets?.link"> {{ show.tickets?.site }} </a></span>
+            </span>
+            <span v-else-if="key === 'bands'">
+              <div class="white">> {{ key.toUpperCase() }}</div>
+              <span v-for="(band, i) in show[key]" :key="i">
+                <div class="my-2">>> {{ band.band }}</div>
+                <span class="" v-for="(link, i) in band['links']" :key="i">
+                  <span class="ml-2">
+                    <a class="dark-alien-purple" target="_blank" :href="link.link"> {{ link.social }} </a>
+                  </span>
+                </span>
+                <br />
+              </span>
+            </span>
+            <span v-else-if="key === 'flyer'">
+              <span class="white">> {{ key.toUpperCase() }} <br /></span>
+              <span>>> <img class="flyer" :src="show.flyer" alt=""></span>
+            </span>
+            <span v-else>
+              <span class="white">> {{ key.toUpperCase() }} <br /></span>
+              <span>>> {{ show[key as keyof Show] }}</span>
+            </span>
+            <!-- <div></div> -->
           </p>
         </div>
       </div>
@@ -29,6 +51,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
+import ics from "ics";
 
 interface Band {
   band: string;
@@ -44,8 +67,7 @@ interface Show {
   venue: string;
   cost: string;
   time: string;
-  bands: string;
-  bandsNew?: Array<Band>;
+  bands?: Array<Band>;
   tickets?: {
     site: string;
     link: string;
@@ -62,49 +84,49 @@ export default defineComponent({
         venue: "The Camel",
         cost: "$12 ADV, $15 DOS",
         time: "Doors @ 7pm - Music @ 8pm",
-        bands: "Dog Lips // Wetwork // Sun Years // Railgun",
-        // bandsNew:[
-        //   {
-        //     band: "Railgun",
-        //     links: [
-        //       {
-        //         social: "bandcamp",
-        //         link: "https://railgunrva.bandcamp.com/music",
-        //       }
-        //     ],
-        //   },
-        //   {
-        //     band: "Dog Lips",
-        //     links: [
-        //       {
-        //         social: "bandcamp",
-        //         link: "https://doglipsband.bandcamp.com/album/dog-lips",
-        //       },
-        //    ]
-        //   },
-        //   {
-        //     band: "Sun Years",
-        //     links: [
-        //       {
-        //         social: "bandcamp",
-        //         link: "https://sunyears.bandcamp.com/album/sun-years-demo",
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     band: "Wetwork",
-        //     links: [
-        //       {
-        //         social: "bandcamp",
-        //         link: "https://wetworkva.bandcamp.com/music",
-        //       },
-        //     ],
-        //   },
-        // ],
-        // tickets: {
-        //   site: "Open Date",
-        //   link: "https://app.opendate.io/e/dog-lips-railgun-wetwork-sun-years-january-15-2025-554678",
-        // },
+        bands:[
+        {
+            band: "Sun Years",
+            links: [
+              {
+                social: "bandcamp",
+                link: "https://sunyears.bandcamp.com/album/sun-years-demo",
+              },
+            ],
+          },
+          {
+            band: "Wetwork",
+            links: [
+              {
+                social: "bandcamp",
+                link: "https://wetworkva.bandcamp.com/music",
+              },
+            ],
+          },
+          {
+            band: "Dog Lips",
+            links: [
+              {
+                social: "bandcamp",
+                link: "https://doglipsband.bandcamp.com/album/dog-lips",
+              },
+           ]
+          },
+          {
+            band: "Railgun",
+            links: [
+              {
+                social: "bandcamp",
+                link: "https://railgunrva.bandcamp.com/music",
+              },
+            ],
+          },
+        ],
+        tickets: {
+          site: "Open Date Tickets",
+          link: "https://app.opendate.io/e/dog-lips-railgun-wetwork-sun-years-january-15-2025-554678",
+        },
+        flyer: "https://wetwork.s3.us-east-1.amazonaws.com/flyers/1-15-25WW.jpg",
       }
     ];
 
@@ -117,4 +139,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.flyer {
+  width: 100%;
+  max-width: 600px;
+}
+</style>
