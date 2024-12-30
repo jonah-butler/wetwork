@@ -5,7 +5,7 @@
     </audio>
     <p class="container-title">{{ extension.toUpperCase() }}</p>
     <div ref="titleContainer" class="title-container">
-      <p ref="songTitle" class="song-title">{{ source.title }}</p>
+      <p ref="songTitle" class="song-title">{{ formattedTitle }}</p>
     </div>
     <div class="d__flex">
       <div v-if="loading" id="loader">
@@ -26,6 +26,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref, watch } from 'vue';
 import type { AudioSource } from "@/components/messages/Audio.vue";
+import { WW_MUSIC_PREFIX } from "@/services/aws/s3";
 
 export default defineComponent({
   name: 'AudioPlayer',
@@ -52,6 +53,10 @@ export default defineComponent({
     const extension = computed(() => {
       return props.source.title.split(".").pop()?.toUpperCase() || "";
     });
+
+    const formattedTitle = computed((): string => {
+      return props.source.title.split(WW_MUSIC_PREFIX)[1];
+    })
 
     const updateSlider = () => {
       rangeData.value = Math.round((audio.value!.currentTime / audio.value!.duration) * 100);
@@ -106,6 +111,7 @@ export default defineComponent({
       marqueeStyle,
       songTitle,
       titleContainer,
+      formattedTitle,
     };
   }
 });

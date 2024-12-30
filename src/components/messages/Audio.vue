@@ -43,7 +43,7 @@ export default defineComponent({
         const objects = await listAllObjects(WW_BUCKET);
         audioSources.value = objects.map((o) => {
           const key = o.Key || "";
-
+          
           return {
             title: key,
             source: WW_ARN + key,

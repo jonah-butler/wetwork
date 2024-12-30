@@ -4,6 +4,7 @@ const wwAccessKey = process.env.VUE_APP_AWS_ACCESS_KEY || "";
 const wwSecretKey = process.env.VUE_APP_AWS_SECRET_KEY || "";
 
 const WW_BUCKET = "wetwork";
+const WW_MUSIC_PREFIX = "music/";
 const WW_ARN = process.env.VUE_APP_WETWORK_ARN || "";
 
 const initClient = (): S3Client => {
@@ -20,13 +21,14 @@ const initClient = (): S3Client => {
 
 const listAllObjects = async (bucket: string): Promise<_Object[]> => {
   try {
-    const params = { Bucket: bucket };
+    const params = { Bucket: bucket, Prefix: WW_MUSIC_PREFIX, };
 
     const client = initClient();
     
     const response = await client.send(new ListObjectsV2Command(params));
     if(response.Contents) {
-      return response.Contents;
+      // filter out directory entry
+      return response.Contents.filter((r) => r.Key !== params.Prefix);
     }
 
     throw new Error("no objects found - bucket is empty");
@@ -43,5 +45,6 @@ export {
   WW_ARN,
   WW_BUCKET,
   listAllObjects,
+  WW_MUSIC_PREFIX,
 };
 
