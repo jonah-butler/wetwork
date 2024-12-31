@@ -213,10 +213,13 @@ export default defineComponent({
         });
       });
 
-      const url = URL.createObjectURL(file);
+      const url = `data:text/calendar;charset=utf-8,${encodeURIComponent(
+        await file.text()
+      )}`;
 
       const a = document.createElement("a");
       a.href = url;
+      a.download = "wetwork-" + Date.now() + ".ics";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
