@@ -14,10 +14,21 @@
         >
           <strong>{{ show.date }}</strong>
           <p v-for="key in Object.keys(show)" :key="key">
-            <span v-if="key === 'tickets'">
+
+            <!-- location fields -->
+            <span v-if="key === 'location'">
+              <span class="white">> {{ key.toUpperCase() }} <br /></span>
+
+              <div>>> {{ show.location.venue }}</div>
+              <div>>> {{ show.location.address }}</div>
+            </span>
+
+            <span v-else-if="key === 'tickets'">
               <span class="white">> {{ key.toUpperCase() }} <br /></span>
               <span>>> <a target="_blank" class="dark-alien-purple" :href="show.tickets?.link"> {{ show.tickets?.site }} </a></span>
             </span>
+
+            <!-- bands field -->
             <span v-else-if="key === 'bands'">
               <div class="white">> {{ key.toUpperCase() }}</div>
               <span v-for="(band, i) in show[key]" :key="i">
@@ -30,16 +41,28 @@
                 <br />
               </span>
             </span>
+
+            <!-- flyer field -->
             <span v-else-if="key === 'flyer'">
               <span class="white">> {{ key.toUpperCase() }} <br /></span>
               <span>>> <img class="flyer" :src="show.flyer" alt=""></span>
             </span>
+
+            <!-- start and end fields -->
+            <span v-else-if="key === 'start' || key === 'end'">
+              <span class="white">> {{ key.toUpperCase() }} <br /></span>
+              <span>>> {{ prettyPrintTime(show[key], show.date) }}</span>            
+            </span>
+
             <span v-else>
               <span class="white">> {{ key.toUpperCase() }} <br /></span>
               <span>>> {{ show[key as keyof Show] }}</span>
             </span>
-            <!-- <div></div> -->
           </p>
+
+          <div>
+            <button @click="saveToCalendar(show)" class="btn-primary">save to calendar</button>
+          </div>
         </div>
       </div>
       <div class="mt-1" v-else>
@@ -51,7 +74,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import ics from "ics";
+import { createEvent, EventAttributes } from "ics";
 
 interface Band {
   band: string;
@@ -61,12 +84,24 @@ interface Band {
   }>,
 }
 
+interface Time {
+  hour: number;
+  minute: number;
+}
+
+interface Location {
+  venue: string;
+  address: string;
+}
+
 interface Show {
   date: string;
-  location: string;
-  venue: string;
+  location: Location;
   cost: string;
-  time: string;
+  start: Time,
+  end: Time,
+  details?: string,
+  endTime?: number,
   bands?: Array<Band>;
   tickets?: {
     site: string;
@@ -80,10 +115,20 @@ export default defineComponent({
     const upcomingShows: Show[] = [
       {
         date: "January 15, 2025",
-        location: "Richmond, VA",
-        venue: "The Camel",
+        location: {
+          venue: "The Camel",
+          address: "1621 W Broad St, Richmond, VA 23220",
+        },
         cost: "$12 ADV, $15 DOS",
-        time: "Doors @ 7pm - Music @ 8pm",
+        start: {
+          hour: 20,
+          minute: 0,
+        },
+        end: {
+          hour: 23,
+          minute: 0
+        },
+        details: "Doors @ 7pm - Music @ 8pm",
         bands:[
         {
             band: "Sun Years",
@@ -134,7 +179,52 @@ export default defineComponent({
       return upcomingShows.filter((s: Show) => new Date(s.date) > new Date());
     });
 
-    return { upcomingShows, futureShows };
+    const prettyPrintTime = (time: Time, date: string): string => {
+      const d = new Date(date);
+      const dateTime = d.setHours(time.hour, time.minute);
+
+      return new Intl.DateTimeFormat("en-us", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      }).format(dateTime);
+    };
+
+    const saveToCalendar = async (show: Show): Promise<void> => {
+      const date = new Date(show.date);
+
+      const event: EventAttributes = {
+        start: [date.getFullYear(), date.getMonth() + 1, date.getDate(), show.start.hour, show.start.minute],
+        title: "Wetwork Show @ " + show.location.venue,
+        duration: { hours:  show.end.hour - show.start.hour},
+        location: show.location.address,
+        url: show.tickets?.link ?? "https://wetwork.music",
+        busyStatus: "BUSY",
+        organizer: {
+          name: "Wetwork",
+          email: "wetworkva@gmail.com"
+        },
+        description: `Night of live music with: ${show.bands?.map((b) => b.band).join(", ")} @ ${show.location.venue}`
+      };
+
+      const file = await new Promise<File>((resolve) => {
+        createEvent(event, (_err, val) => {
+          resolve(new File([val], "wetwork.ics", { type: "text/calendar" }));
+        });
+      });
+
+      const url = URL.createObjectURL(file);
+
+      const a = document.createElement("a");
+      a.href = url;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    };
+
+    return { upcomingShows, futureShows, saveToCalendar, prettyPrintTime };
   },
 });
 </script>

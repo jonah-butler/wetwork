@@ -329,31 +329,6 @@ defineExpose({
 .text-area {
   height: 150px;
 }
-/* move into global */
-.btn-primary {
-  border: 1px solid #76e582;
-  color: #76e582;
-  font-family: "DinaRemaster";
-  font-size: 0.9rem;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-primary:hover {
-  color: white;
-  border: 1px solid white;
-}
-.btn-primary:active {
-  translate: 1px 1px;
-}
-.btn-primary:disabled {
-  color: white;
-  opacity: 0.7;
-  border: 1px solid #732a27;
-}
-.btn-primary:disabled:active {
-  translate: 0 0;
-}
 .caret-container {
   position: relative;
   width: fit-content;
