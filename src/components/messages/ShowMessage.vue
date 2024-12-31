@@ -223,8 +223,6 @@ export default defineComponent({
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-
-      URL.revokeObjectURL(url);
     };
 
     return { upcomingShows, futureShows, saveToCalendar, prettyPrintTime };
