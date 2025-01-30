@@ -1,9 +1,7 @@
 <template>
   <div class="message">
     <span class="light-alien-green">
-      <strong>
-        Upcoming Performances:
-      </strong>
+      <strong>Upcoming Performances:</strong>
       <br />
       ______________________
       <div v-if="futureShows.length">
@@ -14,18 +12,34 @@
         >
           <strong>{{ show.date }}</strong>
           <p v-for="key in Object.keys(show)" :key="key">
-
             <!-- location fields -->
             <span v-if="key === 'location'">
-              <span class="white">> {{ key.toUpperCase() }} <br /></span>
+              <span class="white">
+                > {{ key.toUpperCase() }}
+                <br />
+              </span>
 
               <div>>> {{ show.location.venue }}</div>
               <div>>> {{ show.location.address }}</div>
             </span>
 
             <span v-else-if="key === 'tickets'">
-              <span class="white">> {{ key.toUpperCase() }} <br /></span>
-              <span>>> <a target="_blank" class="dark-alien-purple" :href="show.tickets?.link"> {{ show.tickets?.site }} </a></span>
+              <span class="white">
+                > {{ key.toUpperCase() }}
+                <br />
+              </span>
+              <span>
+                >>
+                <a
+                  v-if="show.tickets.link && show.tickets.site"
+                  target="_blank"
+                  class="dark-alien-purple"
+                  :href="show.tickets?.link"
+                >
+                  {{ show.tickets?.site }}
+                </a>
+                <p class="dark-alien-purple" v-else>No tickets available</p>
+              </span>
             </span>
 
             <!-- bands field -->
@@ -35,7 +49,13 @@
                 <div class="my-2">>> {{ band.band }}</div>
                 <span class="" v-for="(link, i) in band['links']" :key="i">
                   <span class="ml-2">
-                    <a class="dark-alien-purple" target="_blank" :href="link.link"> {{ link.social }} </a>
+                    <a
+                      class="dark-alien-purple"
+                      target="_blank"
+                      :href="link.link"
+                    >
+                      {{ link.social }}
+                    </a>
                   </span>
                 </span>
                 <br />
@@ -44,24 +64,38 @@
 
             <!-- flyer field -->
             <span v-else-if="key === 'flyer'">
-              <span class="white">> {{ key.toUpperCase() }} <br /></span>
-              <span>>> <img class="flyer" :src="show.flyer" alt=""></span>
+              <span class="white">
+                > {{ key.toUpperCase() }}
+                <br />
+              </span>
+              <span>
+                >>
+                <img class="flyer" :src="show.flyer" alt="" />
+              </span>
             </span>
 
             <!-- start and end fields -->
             <span v-else-if="key === 'start' || key === 'end'">
-              <span class="white">> {{ key.toUpperCase() }} <br /></span>
-              <span>>> {{ prettyPrintTime(show[key], show.date) }}</span>            
+              <span class="white">
+                > {{ key.toUpperCase() }}
+                <br />
+              </span>
+              <span>>> {{ prettyPrintTime(show[key], show.date) }}</span>
             </span>
 
             <span v-else>
-              <span class="white">> {{ key.toUpperCase() }} <br /></span>
+              <span class="white">
+                > {{ key.toUpperCase() }}
+                <br />
+              </span>
               <span>>> {{ show[key as keyof Show] }}</span>
             </span>
           </p>
 
           <div>
-            <button @click="saveToCalendar(show)" class="btn-primary">save to calendar</button>
+            <button @click="saveToCalendar(show)" class="btn-primary">
+              save to calendar
+            </button>
           </div>
         </div>
       </div>
@@ -81,7 +115,7 @@ interface Band {
   links: Array<{
     social: string;
     link: string;
-  }>,
+  }>;
 }
 
 interface Time {
@@ -98,44 +132,44 @@ interface Show {
   date: string;
   location: Location;
   cost: string;
-  start: Time,
-  end: Time,
-  details?: string,
-  endTime?: number,
+  start: Time;
+  end: Time;
+  details?: string;
+  endTime?: number;
   bands?: Array<Band>;
   tickets?: {
     site: string;
     link: string;
-  },
-  flyer?: string,
+  };
+  flyer?: string;
 }
 
 export default defineComponent({
   setup() {
     const upcomingShows: Show[] = [
       {
-        date: "January 15, 2025",
+        date: "January 31, 2025",
         location: {
-          venue: "The Camel",
-          address: "1621 W Broad St, Richmond, VA 23220",
+          venue: "Fuzzy Cactus",
+          address: "221 W Brookland Park Blvd, Richmond, VA 23222",
         },
-        cost: "$12 ADV, $15 DOS",
+        cost: "$10",
         start: {
-          hour: 20,
+          hour: 22,
           minute: 0,
         },
         end: {
-          hour: 23,
-          minute: 0
+          hour: 24,
+          minute: 0,
         },
-        details: "Doors @ 7pm - Music @ 8pm",
-        bands:[
-        {
-            band: "Sun Years",
+        details: "Doors @ 9pm - Music @ 10pm",
+        bands: [
+          {
+            band: "Sinister Haze",
             links: [
               {
                 social: "bandcamp",
-                link: "https://sunyears.bandcamp.com/album/sun-years-demo",
+                link: "https://sinisterhaze.bandcamp.com/album/emperor-of-dreams",
               },
             ],
           },
@@ -149,30 +183,22 @@ export default defineComponent({
             ],
           },
           {
-            band: "Dog Lips",
+            band: "Satan's Satyrs",
             links: [
               {
                 social: "bandcamp",
-                link: "https://doglipsband.bandcamp.com/album/dog-lips",
-              },
-           ]
-          },
-          {
-            band: "Railgun",
-            links: [
-              {
-                social: "bandcamp",
-                link: "https://railgunrva.bandcamp.com/music",
+                link: "https://satanssatyrs.bandcamp.com/album/after-dark-2",
               },
             ],
           },
         ],
         tickets: {
-          site: "Open Date Tickets",
-          link: "https://app.opendate.io/e/dog-lips-railgun-wetwork-sun-years-january-15-2025-554678",
+          site: "",
+          link: "",
         },
-        flyer: "https://wetwork.s3.us-east-1.amazonaws.com/flyers/1-15-25WW.jpg",
-      }
+        flyer:
+          "https://wetwork.s3.us-east-1.amazonaws.com/flyers/1-31-25WW.jpg",
+      },
     ];
 
     const futureShows = computed((): Show[] => {
@@ -194,17 +220,25 @@ export default defineComponent({
       const date = new Date(show.date);
 
       const event: EventAttributes = {
-        start: [date.getFullYear(), date.getMonth() + 1, date.getDate(), show.start.hour, show.start.minute],
+        start: [
+          date.getFullYear(),
+          date.getMonth() + 1,
+          date.getDate(),
+          show.start.hour,
+          show.start.minute,
+        ],
         title: "Wetwork Show @ " + show.location.venue,
-        duration: { hours:  show.end.hour - show.start.hour},
+        duration: { hours: show.end.hour - show.start.hour },
         location: show.location.address,
         url: show.tickets?.link ?? "https://wetwork.music",
         busyStatus: "BUSY",
         organizer: {
           name: "Wetwork",
-          email: "wetworkva@gmail.com"
+          email: "wetworkva@gmail.com",
         },
-        description: `Night of live music with: ${show.bands?.map((b) => b.band).join(", ")} @ ${show.location.venue}`
+        description: `Night of live music with: ${show.bands
+          ?.map((b) => b.band)
+          .join(", ")} @ ${show.location.venue}`,
       };
 
       const file = await new Promise<File>((resolve) => {
