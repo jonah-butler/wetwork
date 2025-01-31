@@ -31,7 +31,7 @@
               <span>
                 >>
                 <a
-                  v-if="show.tickets.link && show.tickets.site"
+                  v-if="show.tickets?.link && show.tickets.site"
                   target="_blank"
                   class="dark-alien-purple"
                   :href="show.tickets?.link"
@@ -202,7 +202,10 @@ export default defineComponent({
     ];
 
     const futureShows = computed((): Show[] => {
-      return upcomingShows.filter((s: Show) => new Date(s.date) > new Date());
+      return upcomingShows.filter(
+        (s: Show) =>
+          new Date(new Date(s.date).setHours(23, 59, 59, 999)) > new Date()
+      );
     });
 
     const prettyPrintTime = (time: Time, date: string): string => {
@@ -230,7 +233,10 @@ export default defineComponent({
         title: "Wetwork Show @ " + show.location.venue,
         duration: { hours: show.end.hour - show.start.hour },
         location: show.location.address,
-        url: show.tickets?.link ?? "https://wetwork.music",
+        url:
+          show.tickets?.link !== ""
+            ? show.tickets?.link
+            : "https://wetwork.music",
         busyStatus: "BUSY",
         organizer: {
           name: "Wetwork",
@@ -241,22 +247,26 @@ export default defineComponent({
           .join(", ")} @ ${show.location.venue}`,
       };
 
-      const file = await new Promise<File>((resolve) => {
-        createEvent(event, (_err, val) => {
-          resolve(new File([val], "wetwork.ics", { type: "text/calendar" }));
+      try {
+        const file = await new Promise<File>((resolve) => {
+          createEvent(event, (_err, val) => {
+            resolve(new File([val], "wetwork.ics", { type: "text/calendar" }));
+          });
         });
-      });
 
-      const url = `data:text/calendar;charset=utf-8,${encodeURIComponent(
-        await file.text()
-      )}`;
+        const url = `data:text/calendar;charset=utf-8,${encodeURIComponent(
+          await file.text()
+        )}`;
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "wetwork-" + Date.now() + ".ics";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "wetwork-" + Date.now() + ".ics";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     return { upcomingShows, futureShows, saveToCalendar, prettyPrintTime };
