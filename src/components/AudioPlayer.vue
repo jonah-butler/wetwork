@@ -1,44 +1,70 @@
 <template>
   <div id="audio-player-container" class="mb-3 mr-3">
-    <audio  @timeupdate="updateSlider" preload="none" ref="audio" loop>
-      <source :src="source.source">
+    <audio @timeupdate="updateSlider" preload="none" ref="audio" loop>
+      <source :src="source.source" />
     </audio>
     <p class="container-title">{{ extension.toUpperCase() }}</p>
     <div ref="titleContainer" class="title-container">
-      <p ref="songTitle" class="song-title">{{ formattedTitle }}</p>
+      <p ref="songTitle" class="song-title">{{ source.title }}</p>
     </div>
     <div class="d__flex">
       <div v-if="loading" id="loader">
         <div class="loader-bar"></div>
       </div>
-      <svg v-if="isPaused && !loading" @click="togglePlayback" id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-        <polygon class="play-btn__svg" points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"/>
-      </svg> 
-      <svg v-if="isPlaying && !loading" @click="togglePlayback" id="pause-icon" width="100" viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="64" y="25" width="20" height="50"/>
-        <rect x="24" y="25" width="20" height="50"/>
+      <svg
+        v-if="isPaused && !loading"
+        @click="togglePlayback"
+        id="play-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 26 26"
+      >
+        <polygon
+          class="play-btn__svg"
+          points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"
+        />
       </svg>
-      <input @input="updateAudioTimeStamp" type="range" id="seek-slider" min="0" max="100" v-model="rangeData" step="1">
+      <svg
+        v-if="isPlaying && !loading"
+        @click="togglePlayback"
+        id="pause-icon"
+        width="100"
+        viewBox="0 0 108 108"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect x="64" y="25" width="20" height="50" />
+        <rect x="24" y="25" width="20" height="50" />
+      </svg>
+      <input
+        v-if="!loading"
+        @input="updateAudioTimeStamp"
+        type="range"
+        id="seek-slider"
+        min="0"
+        max="100"
+        v-model="rangeData"
+        step="1"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue';
+import { defineComponent, computed, ref, watch } from "vue";
 import type { AudioSource } from "@/components/messages/Audio.vue";
-import { WW_MUSIC_PREFIX } from "@/services/aws/s3";
+// import { WW_MUSIC_PREFIX } from "@/services/aws/s3";
 
 export default defineComponent({
-  name: 'AudioPlayer',
+  name: "AudioPlayer",
   props: {
     currentlyPlaying: {
       type: String,
-      required: true
+      required: true,
     },
     source: {
       type: Object as () => AudioSource,
       required: true,
-    }
+    },
   },
   setup(props) {
     const isPlaying = ref(false);
@@ -47,19 +73,20 @@ export default defineComponent({
     const rangeData = ref(0);
     const songTitle = ref<HTMLParagraphElement | null>(null);
     const titleContainer = ref<HTMLDivElement | null>(null);
-    const marqueeStyle = ref<{ animationDuration: string; animationName: string } | null>(null);
+    const marqueeStyle = ref<{
+      animationDuration: string;
+      animationName: string;
+    } | null>(null);
     const loading = ref(false);
 
     const extension = computed(() => {
       return props.source.title.split(".").pop()?.toUpperCase() || "";
     });
 
-    const formattedTitle = computed((): string => {
-      return props.source.title.split(WW_MUSIC_PREFIX)[1];
-    })
-
     const updateSlider = () => {
-      rangeData.value = Math.round((audio.value!.currentTime / audio.value!.duration) * 100);
+      rangeData.value = Math.round(
+        (audio.value!.currentTime / audio.value!.duration) * 100
+      );
     };
 
     const updateAudioTimeStamp = () => {
@@ -72,7 +99,7 @@ export default defineComponent({
       if (!audio.value) return;
 
       if (isPaused.value) {
-        if(audio.value.readyState === 0) {
+        if (audio.value.readyState === 0) {
           loading.value = true;
           audio.value.load();
 
@@ -90,13 +117,16 @@ export default defineComponent({
       isPaused.value = !isPaused.value;
     };
 
-    watch(() => props.currentlyPlaying, (newVal) => {
-      if (newVal !== props.source.source) {
-        audio.value?.pause();
-        isPlaying.value = false;
-        isPaused.value = true;
+    watch(
+      () => props.currentlyPlaying,
+      (newVal) => {
+        if (newVal !== props.source.source) {
+          audio.value?.pause();
+          isPlaying.value = false;
+          isPaused.value = true;
+        }
       }
-    });
+    );
 
     return {
       audio,
@@ -111,12 +141,10 @@ export default defineComponent({
       marqueeStyle,
       songTitle,
       titleContainer,
-      formattedTitle,
     };
-  }
+  },
 });
 </script>
-
 
 <style>
 #loader {
@@ -137,7 +165,7 @@ export default defineComponent({
   position: relative;
   top: -2px;
 }
-@keyframes back-and-forth{
+@keyframes back-and-forth {
   0% {
     translate: 0 0;
   }
@@ -186,7 +214,7 @@ export default defineComponent({
 }
 #audio-player-container::before {
   position: absolute;
-  content: '';
+  content: "";
   width: calc(100% + 4px);
   height: calc(100% + 4px);
   left: -2px;
@@ -195,85 +223,86 @@ export default defineComponent({
   z-index: -1;
 }
 
-#play-icon, #pause-icon {
+#play-icon,
+#pause-icon {
   width: 40px;
   fill: #76e582;
   position: relative;
   top: -8px;
 }
 output {
-    display: inline-block;
-    width: 32px;
-    text-align: center;
-    font-size: 20px;
-    margin: 10px 2.5% 0 5%;
-    clear: left;
+  display: inline-block;
+  width: 32px;
+  text-align: center;
+  font-size: 20px;
+  margin: 10px 2.5% 0 5%;
+  clear: left;
 }
 input[type="range"] {
-    position: relative;
-    -webkit-appearance: none;
-    width: 63%;
-    padding: 0;
-    height: 19px;
-    outline: none;
-    background: transparent;
+  position: relative;
+  -webkit-appearance: none;
+  width: 63%;
+  padding: 0;
+  height: 19px;
+  outline: none;
+  background: transparent;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-    height: 3px;
-    cursor: pointer;
-    background: #76e582;
+  height: 3px;
+  cursor: pointer;
+  background: #76e582;
 }
 
 input[type="range"]::-webkit-slider-thumb {
-    position: relative;
-    -webkit-appearance: none;
-    box-sizing: content-box;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    background-color: #76e582;
-    cursor: pointer;
-    margin: -7px 0 0 0;
+  position: relative;
+  -webkit-appearance: none;
+  box-sizing: content-box;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #76e582;
+  cursor: pointer;
+  margin: -7px 0 0 0;
 }
 input[type="range"]:active::-webkit-slider-thumb {
-    transform: scale(1.2);
+  transform: scale(1.2);
 }
 input[type="range"]::-moz-range-track {
-    height: 3px;
-    cursor: pointer;
-    background: #76e582;
+  height: 3px;
+  cursor: pointer;
+  background: #76e582;
 }
 input[type="range"]::-moz-focus-outer {
-    border: 0;
+  border: 0;
 }
 input[type="range"]::-moz-range-thumb {
-    position: relative;
-    -webkit-appearance: none;
-    box-sizing: content-box;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    background-color: #76e582;
-    cursor: pointer;
-    margin: -7px 0 0 0;
+  position: relative;
+  -webkit-appearance: none;
+  box-sizing: content-box;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #76e582;
+  cursor: pointer;
+  margin: -7px 0 0 0;
 }
 input[type="range"]:active::-moz-range-thumb {
-    transform: scale(1.2);
-    background: #76e582;
+  transform: scale(1.2);
+  background: #76e582;
 }
 input[type="range"]::-ms-track {
-    height: 3px;
-    cursor: pointer;
-    background: #76e582;
+  height: 3px;
+  cursor: pointer;
+  background: #76e582;
 }
 .title-container {
   overflow: hidden;
 }
 .container-title {
-    background: #161717;
-    position: absolute;
-    top: -33px;
-    right: 41px;
-    font-size: 22px;
+  background: #161717;
+  position: absolute;
+  top: -33px;
+  right: 41px;
+  font-size: 22px;
 }
 </style>
