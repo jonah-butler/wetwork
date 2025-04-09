@@ -18,15 +18,15 @@
         <rect x="64" y="25" width="20" height="50"/>
         <rect x="24" y="25" width="20" height="50"/>
       </svg>
-      <input @input="updateAudioTimeStamp" type="range" id="seek-slider" min="0" max="100" v-model="rangeData" step="1">
+      <input :disabled="!hasData" @input="updateAudioTimeStamp" type="range" id="seek-slider" min="0" max="100" v-model="rangeData" step="1">
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue';
 import type { AudioSource } from "@/components/messages/Audio.vue";
 import { WW_MUSIC_PREFIX } from "@/services/aws/s3";
+import { computed, defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
   name: 'AudioPlayer',
@@ -49,6 +49,7 @@ export default defineComponent({
     const titleContainer = ref<HTMLDivElement | null>(null);
     const marqueeStyle = ref<{ animationDuration: string; animationName: string } | null>(null);
     const loading = ref(false);
+    const hasData = ref(false);
 
     const extension = computed(() => {
       return props.source.title.split(".").pop()?.toUpperCase() || "";
@@ -112,6 +113,7 @@ export default defineComponent({
       songTitle,
       titleContainer,
       formattedTitle,
+      hasData,
     };
   }
 });
