@@ -107,8 +107,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
 import { createEvent, EventAttributes } from "ics";
+import { computed, defineComponent } from "vue";
 
 interface Band {
   band: string;
@@ -148,7 +148,7 @@ export default defineComponent({
   setup() {
     const upcomingShows: Show[] = [
       {
-        date: "January 31, 2025",
+        date: "May 30, 2025",
         location: {
           venue: "Fuzzy Cactus",
           address: "221 W Brookland Park Blvd, Richmond, VA 23222",
@@ -165,11 +165,20 @@ export default defineComponent({
         details: "Doors @ 9pm - Music @ 10pm",
         bands: [
           {
-            band: "Sinister Haze",
+            band: "Supreme Commander",
             links: [
               {
                 social: "bandcamp",
-                link: "https://sinisterhaze.bandcamp.com/album/emperor-of-dreams",
+                link: "https://supremecommander.bandcamp.com/",
+              },
+            ],
+          },
+          {
+            band: "The Magpie",
+            links: [
+              {
+                social: "bandcamp",
+                link: "https://themagpie.bandcamp.com/",
               },
             ],
           },
@@ -182,12 +191,64 @@ export default defineComponent({
               },
             ],
           },
+        ],
+        tickets: {
+          site: "",
+          link: "",
+        },
+        flyer:
+          "https://wetwork.s3.us-east-1.amazonaws.com/flyers/5-30-25WW.jpg",
+      },
+      {
+        date: "June 26, 2025",
+        location: {
+          venue: "Banditos",
+          address: "2905 Patterson Ave, Richmond, VA 23221",
+        },
+        cost: "TBD",
+        start: {
+          hour: 20,
+          minute: 0,
+        },
+        end: {
+          hour: 24,
+          minute: 0,
+        },
+        details: "Details coming soon",
+        bands: [
           {
-            band: "Satan's Satyrs",
+            band: "Opposition",
+            links: [
+              // {
+              //   social: "bandcamp",
+              //   link: "https://supremecommander.bandcamp.com/",
+              // },
+            ],
+          },
+          {
+            band: "Torment",
+            links: [
+              // {
+              //   social: "bandcamp",
+              //   link: "https://themagpie.bandcamp.com/",
+              // },
+            ],
+          },
+          {
+            band: "Undermines",
+            links: [
+              // {
+              //   social: "bandcamp",
+              //   link: "https://themagpie.bandcamp.com/",
+              // },
+            ],
+          },
+          {
+            band: "Wetwork",
             links: [
               {
                 social: "bandcamp",
-                link: "https://satanssatyrs.bandcamp.com/album/after-dark-2",
+                link: "https://wetworkva.bandcamp.com/music",
               },
             ],
           },
@@ -196,8 +257,49 @@ export default defineComponent({
           site: "",
           link: "",
         },
-        flyer:
-          "https://wetwork.s3.us-east-1.amazonaws.com/flyers/1-31-25WW.jpg",
+        flyer:"",
+      },
+      {
+        date: "July 30, 2025",
+        location: {
+          venue: "Cobra Cabana",
+          address: "901 W Marshall St, Richmond, VA 23220",
+        },
+        cost: "TBD",
+        start: {
+          hour: 20,
+          minute: 0,
+        },
+        end: {
+          hour: 24,
+          minute: 0,
+        },
+        details: "Details coming soon",
+        bands: [
+          {
+            band: "Glowing Brain",
+            links: [
+              {
+                social: "bandcamp",
+                link: "https://glowingbrain.bandcamp.com/music",
+              },
+            ],
+          },
+          {
+            band: "Wetwork",
+            links: [
+              {
+                social: "bandcamp",
+                link: "https://wetworkva.bandcamp.com/music",
+              },
+            ],
+          },
+        ],
+        tickets: {
+          site: "",
+          link: "",
+        },
+        flyer: "",
       },
     ];
 
