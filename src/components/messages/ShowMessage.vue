@@ -6,7 +6,7 @@
       ______________________
       <div v-if="futureShows.length">
         <div
-          class="ff__dina mt-2 mb-2"
+          class="ff__dina mt-8 mb-8"
           v-for="show in futureShows"
           :key="show.date"
         >
@@ -97,6 +97,8 @@
               save to calendar
             </button>
           </div>
+
+          <hr />
         </div>
       </div>
       <div class="mt-1" v-else>
@@ -205,42 +207,42 @@ export default defineComponent({
           venue: "Banditos",
           address: "2905 Patterson Ave, Richmond, VA 23221",
         },
-        cost: "TBD",
+        cost: "$10",
         start: {
-          hour: 20,
+          hour: 19,
           minute: 0,
         },
         end: {
-          hour: 24,
+          hour: 23,
           minute: 0,
         },
-        details: "Details coming soon",
+        details: "18+ plus - doors at 6pm, sounds at 7pm.",
         bands: [
           {
             band: "Opposition",
             links: [
-              // {
-              //   social: "bandcamp",
-              //   link: "https://supremecommander.bandcamp.com/",
-              // },
+              {
+                social: "bandcamp",
+                link: "https://oppositionmahc.bandcamp.com/album/23-demonstration",
+              },
             ],
           },
           {
             band: "Torment",
             links: [
-              // {
-              //   social: "bandcamp",
-              //   link: "https://themagpie.bandcamp.com/",
-              // },
+              {
+                social: "bandcamp",
+                link: "https://tormentrichmond.bandcamp.com/album/torment-2",
+              },
             ],
           },
           {
-            band: "Undermines",
+            band: "Underminded",
             links: [
-              // {
-              //   social: "bandcamp",
-              //   link: "https://themagpie.bandcamp.com/",
-              // },
+              {
+                social: "instagram",
+                link: "https://www.instagram.com/underminedhc/",
+              },
             ],
           },
           {
@@ -257,7 +259,7 @@ export default defineComponent({
           site: "",
           link: "",
         },
-        flyer:"",
+        flyer:"https://wetwork.s3.us-east-1.amazonaws.com/flyers/6-26-25WW.png",
       },
       {
         date: "July 30, 2025",
