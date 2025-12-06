@@ -34,7 +34,7 @@ const audioTitle = trackListings[4].file;
             feeling of paranoia and dread to shape the sound. Wetwork
             has past/current members of Meth Lab, Helgamite, Sinister
             Purpose, and Satan's Satyrs. They've played a wide variety
-            of shows with bandssuch as Windhand, Hotline TNT, Toner,
+            of shows with bands such as Windhand, Hotline TNT, Toner,
             Loudnight, True Body, etc.
           </p>
           <p class="ff__monospace text-left">FFO: Black Flag, Wipers, Poison Idea, The Spits, Melvins</p>
