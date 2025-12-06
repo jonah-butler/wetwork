@@ -9,6 +9,8 @@ const images = [
   "https://wetwork.s3.us-east-1.amazonaws.com/images/ww-5.png",
 ];
 
+const me = "https://wetwork.s3.us-east-1.amazonaws.com/images/ww-8.png";
+
 const ARN = "https://wetwork.s3.us-east-1.amazonaws.com/";
 
 const audioSource = `${ARN}${trackListings[4].path}${trackListings[4].file}`;
@@ -45,6 +47,10 @@ const audioTitle = trackListings[4].file;
       <section class="epk__images container d-flex flex-wrap justify-center mt-8">
         <div class="ml-2 mt-2 mb-2 mr-2" v-for="(image, i) in images" :key="i">
           <img class="max-width-xs btn-primary" :src="image" alt="">
+        </div>
+        <br />
+        <div class="ml-2 mt-2 mb-2 mr-2 flex-break">
+          <img class="max-width-xs btn-primary" :src="me" alt="">
         </div>
       </section>
 
