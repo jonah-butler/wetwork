@@ -1,11 +1,12 @@
-import { Component } from "vue";
+import AudioMessage from "@/components/messages/Audio.vue";
 import BannerMessage from "@/components/messages/Banner.vue";
 import CommandMessage from "@/components/messages/CommandMessage.vue";
-import AudioMessage from "@/components/messages/Audio.vue";
 import ShowMessage from "@/components/messages/ShowMessage.vue";
+import { Component } from "vue";
 import ClearMessage from "./components/messages/ClearMessage.vue";
-import SocialMessage from "./components/messages/SocialMessage.vue";
 import ContactMessage from "./components/messages/ContactMessage.vue";
+import EPK from "./components/messages/EPK.vue";
+import SocialMessage from "./components/messages/SocialMessage.vue";
 
 interface RouteComponent {
   component: Component;
@@ -37,6 +38,9 @@ const routes: Routes = {
   contact: {
     component: ContactMessage,
   },
+  epk: {
+    component: EPK,
+  }
 };
 
 export default routes;
