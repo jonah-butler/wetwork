@@ -20,20 +20,20 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  triggerRef,
-  ref,
-  onUpdated,
-  type ComponentPublicInstance,
-} from "vue";
 import BannerMessage from "@/components/messages/Banner.vue";
 import CachedInput from "@/components/messages/CachedInput.vue";
-import MessageHistory from "@/interfaces/messageHistory.interface";
-import TerminalInput from "@/components/TerminalInput.vue";
-import routeData from "@/data";
 import ErrorMessage from "@/components/messages/Error.vue";
+import TerminalInput from "@/components/TerminalInput.vue";
 import { messages } from "@/composables/messages";
+import routeData from "@/data";
+import MessageHistory from "@/interfaces/messageHistory.interface";
+import {
+  defineComponent,
+  onUpdated,
+  ref,
+  triggerRef,
+  type ComponentPublicInstance,
+} from "vue";
 
 export default defineComponent({
   name: "TerminalLanding",
@@ -131,7 +131,6 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .terminal {
   width: calc(100vw - 40px);
@@ -151,7 +150,7 @@ export default defineComponent({
 
 ::-webkit-scrollbar {
     width: 0px;
-    background: transparent; /* make scrollbar transparent */
+    background: transparent;
 }
 
 .message {

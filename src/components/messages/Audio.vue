@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
 import AudioPlayer from "@/components/AudioPlayer.vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { trackListings } from "./Audio.data";
 // import { listAllObjects, WW_ARN, WW_BUCKET } from "@/services/aws/s3";
 

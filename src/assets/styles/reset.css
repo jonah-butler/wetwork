@@ -25,3 +25,14 @@ hr {
 ::-webkit-scrollbar-thumb:hover {
   background: #132616;
 }
+
+a {
+  color: white;
+}
+a:visited {
+  color: white;
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}

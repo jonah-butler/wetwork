@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
+import Terminal from '@/components/Landing.vue';
 import { defineComponent } from 'vue';
-import Terminal from '@/components/Landing.vue'; // @ is an alias to /src
 
 export default defineComponent({
   name: 'HomeView',

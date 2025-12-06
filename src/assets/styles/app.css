@@ -63,6 +63,9 @@ pre.ff__dina {
   font-family: "DinaRemaster", monospace !important;
 }
 
+.ff__monospace {
+  font-family: monospace;
+}
 /* 
 
 FONT SIZING
@@ -203,4 +206,34 @@ SPACING
 }
 .mx-4 {
   margin: 0 1rem;
+}
+
+/* padding */
+.p-1 {
+  padding: 0.25rem;
+}
+.p-2 {
+  padding: 0.5rem;
+}
+.p-3 {
+  padding: 0.75rem;
+}
+.p-4 {
+  padding: 1rem;
+}
+.p-5 {
+  padding: 1.25rem;
+}
+.p-6 {
+  padding: 1.5rem;
+}
+.p-7 {
+  padding: 1.75rem;
+}
+.p-8 {
+  padding: 2rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
 }

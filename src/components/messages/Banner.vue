@@ -8,7 +8,7 @@
 ░░╚██╔╝░╚██╔╝░███████╗░░░██║░░░░░╚██╔╝░╚██╔╝░╚█████╔╝██║░░██║██║░╚██╗
 ░░░╚═╝░░░╚═╝░░╚══════╝░░░╚═╝░░░░░░╚═╝░░░╚═╝░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝ v1.0.0
     </pre>
-    <p class="light-alien-green">
+    <p v-if="showSubText" class="light-alien-green">
       Type 'help' to see a full list of available commands
     </p>
   </div>
@@ -17,6 +17,13 @@
 <script>
 export default {
   name: 'BannerMessage',
+  props: {
+    showSubText: {
+      default: true,
+      required: false,
+      type: Boolean,
+    }
+  }
 }
 </script>
 <style scoped>

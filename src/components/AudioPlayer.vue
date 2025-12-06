@@ -3,7 +3,7 @@
     <audio @timeupdate="updateSlider" preload="none" ref="audio" loop>
       <source :src="source.source" />
     </audio>
-    <p class="container-title">{{ extension.toUpperCase() }}</p>
+    <p class="container-title" :style="`background-color: ${containerBackgroundColor}`">{{ extension.toUpperCase() }}</p>
     <div ref="titleContainer" class="title-container">
       <p ref="songTitle" class="song-title">{{ source.title }}</p>
     </div>
@@ -55,8 +55,14 @@ export default defineComponent({
       type: Object as () => AudioSource,
       required: true,
     },
+    containerBackgroundColor: {
+      required: false,
+      default: '#161717',
+      type: String,
+    }
   },
   setup(props) {
+    console.log(props.source);
     const isPlaying = ref(false);
     const isPaused = ref(true);
     const audio = ref<HTMLAudioElement>();
@@ -226,7 +232,6 @@ export default defineComponent({
   height: calc(100% + 4px);
   left: -2px;
   top: -2px;
-  background: linear-gradient(to left, #007db5, #ff8a00);
   z-index: -1;
 }
 
@@ -313,7 +318,6 @@ input[type="range"]:disabled::-webkit-slider-thumb {
   overflow: hidden;
 }
 .container-title {
-  background: #161717;
   position: absolute;
   top: -33px;
   right: 41px;
