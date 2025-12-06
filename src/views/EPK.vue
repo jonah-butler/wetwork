@@ -52,6 +52,10 @@ const audioTitle = trackListings[4].file;
         <div class="ml-2 mt-2 mb-2 mr-2 flex-break">
           <img class="max-width-xs btn-primary" :src="me" alt="">
         </div>
+
+        <div class="ff__monospace">
+          photos by <a class="ww-green" href="https://www.instagram.com/gutterdrone/" target="_blank">gutterdrone</a>
+        </div>
       </section>
 
       <section class="epk__release container mt-8 p-8">
