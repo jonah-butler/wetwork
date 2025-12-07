@@ -62,7 +62,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    console.log(props.source);
     const isPlaying = ref(false);
     const isPaused = ref(true);
     const audio = ref<HTMLAudioElement>();

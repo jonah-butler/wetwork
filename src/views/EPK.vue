@@ -20,11 +20,13 @@ const audioTitle = trackListings[4].file;
 
 <template>
   <div class="epk margin-auto text-center d-flex justify-center">
+    <!-- LOGO -->
     <section class="epk__inner_container container">
       <section class="epk__logo_container container">
         <img class="full-width max-width-md" src="../../public/wetwork-font-logo-green.png">
       </section>
 
+      <!-- BIO -->
       <section class="epk__bio mt-8 container">
         <div class="epk__inner_container max-width-sm margin-auto">
           <p class="ff__monospace text-left">
@@ -35,7 +37,7 @@ const audioTitle = trackListings[4].file;
             has past/current members of Meth Lab, Helgamite, Sinister
             Purpose, and Satan's Satyrs. They've played a wide variety
             of shows with bands such as Windhand, Hotline TNT, Toner,
-            Loudnight, True Body, etc.
+            Loud Night, True Body, etc.
           </p>
           <p class="ff__monospace text-left">FFO: Black Flag, Wipers, Poison Idea, The Spits, Melvins</p>
           <div class="mt-8">
@@ -44,11 +46,12 @@ const audioTitle = trackListings[4].file;
         </div>
       </section>
 
+      <!-- Images -->
       <section class="epk__images container d-flex flex-wrap justify-center mt-8">
         <div class="ml-2 mt-2 mb-2 mr-2" v-for="(image, i) in images" :key="i">
           <img class="max-width-xs btn-primary" :src="image" alt="">
         </div>
-        <br />
+
         <div class="ml-2 mt-2 mb-2 mr-2 flex-break">
           <img class="max-width-xs btn-primary" :src="me" alt="">
         </div>
@@ -58,6 +61,7 @@ const audioTitle = trackListings[4].file;
         </div>
       </section>
 
+      <!-- Latest Release -->
       <section class="epk__release container mt-8 p-8">
         <div class="width-full row mt-8">
           <div class="col–small-12 col-md-6 ff__monospace p-1 dir-col justify-center">
@@ -96,6 +100,7 @@ const audioTitle = trackListings[4].file;
         </div>
       </section>
 
+      <!-- Links & Footer -->
       <section class="epk__links container ff__monospace mt-8 d-flex align-center dir-col justify-center">
         <div class="epk__links_container">
           <p><span><a href="https://wetworkva.bandcamp.com/album/wetwork">Buy the LP</a></span></p>
@@ -184,7 +189,6 @@ const audioTitle = trackListings[4].file;
       top: 77px;
       transform: rotate(349deg);
       left: -100px;
-      /* animation: laser-movement1 4s linear alternate infinite; */
     }
 
     .l2 {
@@ -253,37 +257,4 @@ const audioTitle = trackListings[4].file;
       transform: rotate(137deg);
     }
   }
-
-  @keyframes laser-movement1 {
-    0% {
-      top: 77px;
-      left: -100px;
-    }
-
-    100% {
-      top: 70px;
-      left: -91px;
-    }
-  }
-
-  @keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-5px, 5px);
-  }
-  40% {
-    transform: translate(-5px, -5px);
-  }
-  60% {
-    transform: translate(5px, 5px);
-  }
-  80% {
-    transform: translate(5px, -5px);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
 </style>
