@@ -94,7 +94,7 @@ const audioTitle = trackListings[4].file;
             </div>
             <div class="green-block"></div>
           </div>
-          <div class="col–small-12 col-md-6">
+          <div class="col–small-12 col-md-6 align-center">
             <img class="max-width-lg full-width" src="https://wetwork.s3.us-east-1.amazonaws.com/images/ww-poster.png" alt="" />
           </div>
         </div>
